@@ -139,7 +139,7 @@ public class OffLine extends Algorithm {
         tmp.row = cellrobot.row;
         if (matrix[cellrobot.column][cellrobot.row].left) {
             if (checkNotOver(tmp.column, tmp.row) && matrix[tmp.column][tmp.row].valuebigcell && matrix[tmp.column][tmp.row].added) {
-                select.add(matrix[tmp.column][tmp.row]);
+				select.add(matrix[tmp.column][tmp.row]);
             }
         }
 
