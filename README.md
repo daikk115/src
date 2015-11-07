@@ -12,4 +12,5 @@ Phân công:
 Ghi chú:
 
 T thấy hoạt động của nó là các hàm draw thực thi các công việc, xong khi gọi repaint() thì nó mới cập nhật lại dữ liệu, thành ra, mình thay đổi vị trí robot chỉ cần vẽ lại chỗ đó + xê dịch 1 chút là ok.
+
 Tương tự khi click chuột để tạo các block, mình sẽ cập nhật nó vào value của 1 SubCell cụ thể và gọi repaint() mỗi cho đó là xong. Tất nhiên, trong hàm repaint() đã có hàm vẽ tất cả block dựa vào matrix các SubCell.
