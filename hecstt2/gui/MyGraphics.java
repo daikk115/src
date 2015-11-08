@@ -84,7 +84,7 @@ public class MyGraphics extends JFrame {
 	private boolean keySTC = false;
 
 	public MyGraphics() {
-		setTitle("Đặng Văn Đại - 20121469");
+		setTitle("BÀI TOÁN TÌM ĐƯỜNG ĐI BAO PHỦ");
 		setLayout(new BorderLayout());
 		this.screen = GraphicsEnvironment.getLocalGraphicsEnvironment()
 				.getMaximumWindowBounds();
@@ -256,6 +256,7 @@ public class MyGraphics extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				keySTC = true;
 				online.start();
 			}
 		});

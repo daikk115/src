@@ -197,15 +197,15 @@ public class Algorithm extends Thread {
 		neighbors.add(n3);
 		neighbors.add(n4);
 
-		if (neighbors.get(0) != null && neighbors.get(1) != null) {
-			if (checkNotOver(end.column, end.row)
-					&& matrix[end.column][end.row].valuebigcell
-					&& !matrix[end.column][end.row].added) {
+		if (neighbors.get(0) != null || neighbors.get(1) != null
+				|| neighbors.get(2) != null || neighbors.get(3) != null) {
+			if (checkNotOver(end.column, end.row)) {
 				// matrix[end.column][end.row].added = true;
 				// matrix[end.column - 1][end.row].added = true;
 				// matrix[end.column][end.row - 1].added = true;
 				// matrix[end.column - 1][end.row - 1].added = true;
 
+				System.out.println(this.listSTC.size());
 				this.listSTC.add(new Edge(start, end));
 
 				if (neighbors.get(0) != null) {

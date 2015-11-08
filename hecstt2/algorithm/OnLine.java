@@ -19,7 +19,7 @@ public class OnLine extends Algorithm {
 	@Override
 	public void run() {
 		do {
-			onlineSTC(null, new SubCell(0, 0));
+			onlineSTC(null, new SubCell(1, 1));
 		} while (numberCols > mapconfig.numbercolumns
 				|| numberRows > mapconfig.numberrows);
 	}
@@ -134,7 +134,6 @@ public class OnLine extends Algorithm {
 			} else if (distanceRow == 0 && distanceCol == 2) {
 				if (n1 != null)
 					neighbors.add(n1);
-
 				if (n2 != null)
 					neighbors.add(n2);
 				if (n3 != null)
