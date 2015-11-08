@@ -10,6 +10,7 @@ package hecstt2.gui;
  * @author daidv Hệ cơ sở tri thức - thầy Phạm Văn Hải
  */
 import hecstt2.algorithm.OffLine;
+import hecstt2.algorithm.OnLine;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -78,6 +79,7 @@ public class MyGraphics extends JFrame {
 	public ArrayList<Edge> listSTC = new ArrayList<>();
 
 	private OffLine offline;
+	private OnLine online;
 
 	private boolean keySTC = false;
 
@@ -210,6 +212,7 @@ public class MyGraphics extends JFrame {
 		});
 
 		offline = new OffLine(this);
+		online = new OnLine(this);
 
 		// tạo JPanel để bỏ select heuristic vào
 		JPanel left = new JPanel();
@@ -242,6 +245,18 @@ public class MyGraphics extends JFrame {
 						mapconfig.numberrows);
 				offline.searchSTC();
 				repaint();
+			}
+		});
+
+		// Online Algorithm
+		JButton onlineBtn = new JButton("Online");
+		onlineBtn.setBounds(20, 75, 120, 35);
+		onlineBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				online.start();
 			}
 		});
 
@@ -280,6 +295,7 @@ public class MyGraphics extends JFrame {
 		middle_left.setLayout(null);
 		middle_left.setBounds(0, 250, 300, 200);
 		middle_left.add(searchstc);
+		middle_left.add(onlineBtn);
 		middle_left.add(clear);
 		middle_left.add(run);
 

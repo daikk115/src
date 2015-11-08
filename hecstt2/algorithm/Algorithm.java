@@ -183,49 +183,68 @@ public class Algorithm extends Thread {
 	 */
 	public void constructST(SubCell start, SubCell end) {
 		ArrayList<SubCell> neighbors = new ArrayList<>();
-		SubCell n1, n2, n3, n4;
-		n1 = matrix[start.column][start.row - 2];
-		n2 = matrix[start.column - 2][start.row];
-		n3 = matrix[start.column][start.row + 2];
-		n4 = matrix[start.column + 2][start.row];
+		SubCell n1 = null, n2 = null, n3 = null, n4 = null;
+		if (start.row >= 2)
+			n1 = matrix[start.column][start.row - 2];
+		if (start.column >= 2)
+			n2 = matrix[start.column - 2][start.row];
+		if (start.row < (mapconfig.numberrows - 2))
+			n3 = matrix[start.column][start.row + 2];
+		if (start.column < (mapconfig.numbercolumns - 2))
+			n4 = matrix[start.column + 2][start.row];
 		neighbors.add(n1);
 		neighbors.add(n2);
 		neighbors.add(n3);
 		neighbors.add(n4);
 
-		if (checkNotOver(end.column, end.row)) {
-			matrix[end.column][end.row].added = true;
-			matrix[end.column - 1][end.row].added = true;
-			matrix[end.column][end.row - 1].added = true;
-			matrix[end.column - 1][end.row - 1].added = true;
+		if (neighbors.get(0) != null && neighbors.get(1) != null) {
+			if (checkNotOver(end.column, end.row)
+					&& matrix[end.column][end.row].valuebigcell
+					&& !matrix[end.column][end.row].added) {
+				// matrix[end.column][end.row].added = true;
+				// matrix[end.column - 1][end.row].added = true;
+				// matrix[end.column][end.row - 1].added = true;
+				// matrix[end.column - 1][end.row - 1].added = true;
 
-			this.listSTC.add(new Edge(start, end));
+				this.listSTC.add(new Edge(start, end));
 
-			if (end.column == neighbors.get(0).column
-					&& end.row == neighbors.get(0).row) {
+				if (neighbors.get(0) != null) {
+					if (end.column == neighbors.get(0).column
+							&& end.row == neighbors.get(0).row) {
 
-				matrix[start.column][start.row - 1].left = false;
-				matrix[start.column][start.row - 2].left = false;
-				matrix[start.column - 1][start.row - 1].right = false;
-				matrix[start.column - 1][start.row - 2].right = false;
-			} else if (end.column == neighbors.get(1).column
-					&& end.row == neighbors.get(1).row) {
-				matrix[start.column - 1][start.row].top = false;
-				matrix[start.column - 2][start.row].top = false;
-				matrix[start.column - 1][start.row - 1].down = false;
-				matrix[start.column - 2][start.row - 1].down = false;
-			} else if (end.column == neighbors.get(2).column
-					&& end.row == neighbors.get(2).row) {
-				matrix[start.column][start.row].left = false;
-				matrix[start.column - 1][start.row].right = false;
-				matrix[start.column][start.row + 1].left = false;
-				matrix[start.column - 1][start.row + 1].right = false;
-			} else if (end.column == neighbors.get(3).column
-					&& end.row == neighbors.get(3).row) {
-				matrix[start.column][start.row].top = false;
-				matrix[start.column][start.row - 1].down = false;
-				matrix[start.column + 1][start.row - 1].down = false;
-				matrix[start.column + 1][start.row].top = false;
+						matrix[start.column][start.row - 1].left = false;
+						matrix[start.column][start.row - 2].left = false;
+						matrix[start.column - 1][start.row - 1].right = false;
+						matrix[start.column - 1][start.row - 2].right = false;
+					}
+				}
+				if (neighbors.get(1) != null) {
+					if (end.column == neighbors.get(1).column
+							&& end.row == neighbors.get(1).row) {
+						matrix[start.column - 1][start.row].top = false;
+						matrix[start.column - 2][start.row].top = false;
+						matrix[start.column - 1][start.row - 1].down = false;
+						matrix[start.column - 2][start.row - 1].down = false;
+					}
+				}
+				if (neighbors.get(2) != null) {
+					if (end.column == neighbors.get(2).column
+							&& end.row == neighbors.get(2).row) {
+						matrix[start.column][start.row].left = false;
+						matrix[start.column - 1][start.row].right = false;
+						matrix[start.column][start.row + 1].left = false;
+						matrix[start.column - 1][start.row + 1].right = false;
+					}
+				}
+				if (neighbors.get(3) != null) {
+					if (end.column == neighbors.get(3).column
+							&& end.row == neighbors.get(3).row) {
+						matrix[start.column][start.row].top = false;
+						matrix[start.column][start.row - 1].down = false;
+						matrix[start.column + 1][start.row - 1].down = false;
+						matrix[start.column + 1][start.row].top = false;
+					}
+				}
 			}
 		}
 	}
