@@ -1,6 +1,5 @@
 package hecstt2.algorithm;
 
-import hecstt2.gui.Edge;
 import hecstt2.gui.MyGraphics;
 import hecstt2.gui.SubCell;
 
@@ -28,10 +27,10 @@ public class OnLine extends Algorithm {
 		distanceCol = parentCell.column - currentCell.column;
 		distanceRow = parentCell.row - currentCell.row;
 		SubCell n1, n2, n3, n4;
-		n1 = matrix[currentCell.column][currentCell.row - 1];
-		n2 = matrix[currentCell.column - 1][currentCell.row];
-		n3 = matrix[currentCell.column][currentCell.row + 1];
-		n4 = matrix[currentCell.column + 1][currentCell.row];
+		n1 = matrix[currentCell.column][currentCell.row - 2];
+		n2 = matrix[currentCell.column - 2][currentCell.row];
+		n3 = matrix[currentCell.column][currentCell.row + 2];
+		n4 = matrix[currentCell.column + 2][currentCell.row];
 		if (distanceRow == -2 && distanceCol == 0) {
 			neighbors.add(n2);
 			neighbors.add(n3);
@@ -49,20 +48,17 @@ public class OnLine extends Algorithm {
 			neighbors.add(n2);
 			neighbors.add(n3);
 		} else {
-			System.out.println("Invalid parent cell!");
 		}
 		return neighbors;
 	}
 
 	public void onlineSTC(SubCell parentCell, SubCell currentCell) {
 		ArrayList<SubCell> neighbors = neighbors(parentCell, currentCell);
-		for (int i = 1; i <= 3; i++) {
-			if (!neighbors.get(i).valuebigcell) {
-				i++;
+		for (int i = 0; i < neighbors.size(); i++) {
+			if (!matrix[neighbors.get(i).column][neighbors.get(i).row].valuebigcell) {
 				continue;
 			}
-
-			this.listSTC.add(new Edge(currentCell, neighbors.get(i)));
+			constructST(currentCell, neighbors.get(i));
 			this.frame.repaint();
 			move(currentCell, neighbors.get(i));
 			onlineSTC(currentCell, neighbors.get(i));

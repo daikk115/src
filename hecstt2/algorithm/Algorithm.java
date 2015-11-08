@@ -45,9 +45,9 @@ public class Algorithm extends Thread {
 
 	}
 
-	public void searchBlock() {
-		for (int i = 0; i < mapconfig.numbercolumns; i += 2) {
-			for (int j = 0; j < mapconfig.numberrows; j += 2) {
+	public void checkAllBlock(int numberCols, int numberRows) {
+		for (int i = 0; i < numberCols; i += 2) {
+			for (int j = 0; j < numberRows; j += 2) {
 				if (!(matrix[i][j].value && matrix[i + 1][j].value
 						&& matrix[i][j + 1].value && matrix[i + 1][j + 1].value)) {
 					matrix[i][j].valuebigcell = false;
@@ -175,5 +175,58 @@ public class Algorithm extends Thread {
 	public boolean checkNotOver(int x, int y) {
 		return x >= 0 && y >= 0 && x < mapconfig.numbercolumns
 				&& y < mapconfig.numberrows;
+	}
+
+	/*
+	 * Phuong thuc de cau truc ST(dua vao code trong searchSTC cua DaiDV, co the
+	 * dung chung giua OFFLINE & ONLINE
+	 */
+	public void constructST(SubCell start, SubCell end) {
+		ArrayList<SubCell> neighbors = new ArrayList<>();
+		SubCell n1, n2, n3, n4;
+		n1 = matrix[start.column][start.row - 2];
+		n2 = matrix[start.column - 2][start.row];
+		n3 = matrix[start.column][start.row + 2];
+		n4 = matrix[start.column + 2][start.row];
+		neighbors.add(n1);
+		neighbors.add(n2);
+		neighbors.add(n3);
+		neighbors.add(n4);
+
+		if (checkNotOver(end.column, end.row)) {
+			matrix[end.column][end.row].added = true;
+			matrix[end.column - 1][end.row].added = true;
+			matrix[end.column][end.row - 1].added = true;
+			matrix[end.column - 1][end.row - 1].added = true;
+
+			this.listSTC.add(new Edge(start, end));
+
+			if (end.column == neighbors.get(0).column
+					&& end.row == neighbors.get(0).row) {
+
+				matrix[start.column][start.row - 1].left = false;
+				matrix[start.column][start.row - 2].left = false;
+				matrix[start.column - 1][start.row - 1].right = false;
+				matrix[start.column - 1][start.row - 2].right = false;
+			} else if (end.column == neighbors.get(1).column
+					&& end.row == neighbors.get(1).row) {
+				matrix[start.column - 1][start.row].top = false;
+				matrix[start.column - 2][start.row].top = false;
+				matrix[start.column - 1][start.row - 1].down = false;
+				matrix[start.column - 2][start.row - 1].down = false;
+			} else if (end.column == neighbors.get(2).column
+					&& end.row == neighbors.get(2).row) {
+				matrix[start.column][start.row].left = false;
+				matrix[start.column - 1][start.row].right = false;
+				matrix[start.column][start.row + 1].left = false;
+				matrix[start.column - 1][start.row + 1].right = false;
+			} else if (end.column == neighbors.get(3).column
+					&& end.row == neighbors.get(3).row) {
+				matrix[start.column][start.row].top = false;
+				matrix[start.column][start.row - 1].down = false;
+				matrix[start.column + 1][start.row - 1].down = false;
+				matrix[start.column + 1][start.row].top = false;
+			}
+		}
 	}
 }
