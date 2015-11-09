@@ -178,7 +178,7 @@ public class OffLine extends Algorithm {
 		}
 		if (!select.isEmpty()) {
 			for (SubCell abc : select) {
-				if (XXX(abc, cellrobot)) {
+				if (checkDirection(abc, cellrobot)) {
 					// System.out.println("uu tien cung canh");
 					return abc;
 				} else {
@@ -197,7 +197,7 @@ public class OffLine extends Algorithm {
 		}
 	}
 
-	public boolean XXX(SubCell a, SubCell b) {
+	public boolean checkDirection(SubCell a, SubCell b) {
 		a = matrix[a.column][a.row];
 		b = matrix[b.column][b.row];
 		return (!a.top && !b.top) || (!a.down && !b.down)

@@ -18,10 +18,7 @@ public class OnLine extends Algorithm {
 
 	@Override
 	public void run() {
-		do {
-			onlineSTC(null, new SubCell(1, 1));
-		} while (numberCols > mapconfig.numbercolumns
-				|| numberRows > mapconfig.numberrows);
+		onlineSTC(null, new SubCell(1, 1));
 	}
 
 	/*
@@ -87,8 +84,8 @@ public class OnLine extends Algorithm {
 						null, ex);
 			}
 			frame.repaint(robot.x, robot.y, mapconfig.cell, mapconfig.cell);
-			currentCell.column = nextCell.column;
-			currentCell.row = nextCell.row;
+			// currentCell.column = nextCell.column;
+			// currentCell.row = nextCell.row;
 		}
 	}
 
@@ -104,15 +101,23 @@ public class OnLine extends Algorithm {
 		} else {
 			distanceCol = parentCell.column - currentCell.column;
 			distanceRow = parentCell.row - currentCell.row;
+			System.out.println("Distance : " + parentCell.column + " "
+					+ currentCell.column);
+			System.out.println("Distance : " + parentCell.row + " "
+					+ currentCell.row);
 			SubCell n1 = null, n2 = null, n3 = null, n4 = null;
-			if (currentCell.row >= 2)
+			if (currentCell.row >= 2) {
 				n1 = matrix[currentCell.column][currentCell.row - 2];
-			if (currentCell.column >= 2)
+			}
+			if (currentCell.column >= 2) {
 				n2 = matrix[currentCell.column - 2][currentCell.row];
-			if (currentCell.row < (mapconfig.numberrows - 2))
+			}
+			if (currentCell.row < (mapconfig.numberrows - 2)) {
 				n3 = matrix[currentCell.column][currentCell.row + 2];
-			if (currentCell.column < (mapconfig.numbercolumns - 2))
+			}
+			if (currentCell.column < (mapconfig.numbercolumns - 2)) {
 				n4 = matrix[currentCell.column + 2][currentCell.row];
+			}
 
 			if (distanceRow == -2 && distanceCol == 0) {
 				if (n2 != null)
@@ -176,12 +181,11 @@ public class OnLine extends Algorithm {
 	public void onlineSTC(SubCell parentCell, SubCell currentCell) {
 		ArrayList<SubCell> neighbors = neighbors(parentCell, currentCell);
 		checkAllBlock(numberCols, numberRows);
-
 		for (int i = 0; i < neighbors.size(); i++) {
+			checkAllBlock(numberCols, numberRows);
 			countNumber(currentCell, neighbors.get(i));
-			if (!matrix[neighbors.get(i).column][neighbors.get(i).row].valuebigcell) {
+			if (!matrix[neighbors.get(i).column][neighbors.get(i).row].valuebigcell) 
 				continue;
-			}
 			constructST(currentCell, neighbors.get(i));
 			this.frame.repaint();
 			System.out.println("Move forward");
@@ -192,6 +196,10 @@ public class OnLine extends Algorithm {
 		if (currentCell.column != 1 && currentCell.row != 1) {
 			System.out.println("Move back");
 			move(currentCell, parentCell);
+		}
+
+		if (!matrix[parentCell.column][parentCell.row].valuebigcell) {
+			onlineSTC(currentCell, parentCell);
 		}
 	}
 }
