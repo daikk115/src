@@ -24,6 +24,9 @@ public class OnLine extends Algorithm {
 				|| numberRows > mapconfig.numberrows);
 	}
 
+	/*
+	 * Di chuyen giua 2 subcell
+	 */
 	public void move(SubCell currentCell, SubCell nextCell) {
 		if (nextCell.column == currentCell.column) {
 			if (nextCell.row > currentCell.row) {
@@ -89,6 +92,9 @@ public class OnLine extends Algorithm {
 		}
 	}
 
+	/*
+	 * Trả về danh sách hàng xóm của một Cell dựa trên vị trí Cell cha.
+	 */
 	public ArrayList<SubCell> neighbors(SubCell parentCell, SubCell currentCell) {
 		ArrayList<SubCell> neighbors = new ArrayList<>();
 		int distanceCol, distanceRow;
@@ -120,9 +126,8 @@ public class OnLine extends Algorithm {
 					neighbors.add(n3);
 				if (n4 != null)
 					neighbors.add(n4);
-				if (n1 != null) {
+				if (n1 != null)
 					neighbors.add(n1);
-				}
 			} else if (distanceRow == 2 && distanceCol == 0) {
 				if (n4 != null)
 					neighbors.add(n4);
@@ -142,45 +147,50 @@ public class OnLine extends Algorithm {
 				System.out.println("Loi khi add neighbors");
 			}
 		}
+
+		for (int i = 0; i < neighbors.size(); i++) {
+			if (parentCell != null)
+				System.out.println("Parent:" + parentCell.column + "x"
+						+ parentCell.row + " Neighbors of "
+						+ currentCell.column + "x" + currentCell.row + ":"
+						+ neighbors.get(i).column + "x" + neighbors.get(i).row);
+		}
+
 		return neighbors;
 	}
 
+	/*
+	 * Phuong thuc tinh so hang + so cot da duoc duyet! Chua tham dinh tinh chac
+	 * chan
+	 */
 	public void countNumber(SubCell currentCell, SubCell nextCell) {
-		try {
-			int distanceCol, distanceRow;
-			distanceCol = currentCell.column - nextCell.column;
-			distanceRow = currentCell.row - nextCell.row;
-			if (Math.abs(distanceCol) > 0
-					&& numberCols <= mapconfig.numbercolumns) {
-				numberCols += Math.abs(distanceCol);
-			}
-
-			if (Math.abs(distanceRow) > 0 && numberRows <= mapconfig.numberrows) {
-				numberRows += Math.abs(distanceRow);
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println(e.getMessage());
-		}
+		if (Math.abs(nextCell.column) > numberCols)
+			numberCols = nextCell.column;
+		if (Math.abs(nextCell.row) > numberRows)
+			numberRows = nextCell.row;
 	}
 
+	/*
+	 * Online STC
+	 */
 	public void onlineSTC(SubCell parentCell, SubCell currentCell) {
 		ArrayList<SubCell> neighbors = neighbors(parentCell, currentCell);
 		checkAllBlock(numberCols, numberRows);
+
 		for (int i = 0; i < neighbors.size(); i++) {
-			System.out.println("Toa do Neighbor thu " + i + ":"
-					+ neighbors.get(i).column + "x" + neighbors.get(i).row);
 			countNumber(currentCell, neighbors.get(i));
 			if (!matrix[neighbors.get(i).column][neighbors.get(i).row].valuebigcell) {
 				continue;
 			}
 			constructST(currentCell, neighbors.get(i));
 			this.frame.repaint();
+			System.out.println("Move forward");
 			move(currentCell, neighbors.get(i));
 			onlineSTC(currentCell, neighbors.get(i));
 		}
 
-		if (currentCell.column != 0 && currentCell.row != 0) {
+		if (currentCell.column != 1 && currentCell.row != 1) {
+			System.out.println("Move back");
 			move(currentCell, parentCell);
 		}
 	}

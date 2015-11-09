@@ -70,7 +70,6 @@ public class Algorithm extends Thread {
 		SubCell tmp = new SubCell(0, 0);
 		stack.add(currentcell);
 		while (!stack.isEmpty()) {
-
 			currentcell = stack.get(stack.size() - 1);
 			stack.remove(stack.size() - 1);
 			// kiểm tra đi sang phải
@@ -197,15 +196,14 @@ public class Algorithm extends Thread {
 		neighbors.add(n3);
 		neighbors.add(n4);
 
-		if (neighbors.get(0) != null || neighbors.get(1) != null
-				|| neighbors.get(2) != null || neighbors.get(3) != null) {
+		if (!neighbors.isEmpty()) {
 			if (checkNotOver(end.column, end.row)) {
 				// matrix[end.column][end.row].added = true;
 				// matrix[end.column - 1][end.row].added = true;
 				// matrix[end.column][end.row - 1].added = true;
 				// matrix[end.column - 1][end.row - 1].added = true;
 
-				System.out.println(this.listSTC.size());
+				// System.out.println(this.listSTC.size());
 				this.listSTC.add(new Edge(start, end));
 
 				if (neighbors.get(0) != null) {
