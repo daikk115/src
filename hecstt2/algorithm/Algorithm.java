@@ -176,74 +176,85 @@ public class Algorithm extends Thread {
 				&& y < mapconfig.numberrows;
 	}
 
-	/*
-	 * Phuong thuc de cau truc ST(dua vao code trong searchSTC cua DaiDV, co the
-	 * dung chung giua OFFLINE & ONLINE
-	 */
-	public void constructST(SubCell start, SubCell end) {
-		ArrayList<SubCell> neighbors = new ArrayList<>();
-		SubCell n1 = null, n2 = null, n3 = null, n4 = null;
-		if (start.row >= 2)
-			n1 = matrix[start.column][start.row - 2];
-		if (start.column >= 2)
-			n2 = matrix[start.column - 2][start.row];
-		if (start.row < (mapconfig.numberrows - 2))
-			n3 = matrix[start.column][start.row + 2];
-		if (start.column < (mapconfig.numbercolumns - 2))
-			n4 = matrix[start.column + 2][start.row];
-		neighbors.add(n1);
-		neighbors.add(n2);
-		neighbors.add(n3);
-		neighbors.add(n4);
+	public SubCell robotNextStep(SubCell cellrobot) {
 
-		if (!neighbors.isEmpty()) {
-			if (checkNotOver(end.column, end.row)) {
-				// matrix[end.column][end.row].added = true;
-				// matrix[end.column - 1][end.row].added = true;
-				// matrix[end.column][end.row - 1].added = true;
-				// matrix[end.column - 1][end.row - 1].added = true;
+		// xét 4 hướng thôi
+		SubCell tmp = new SubCell(0, 0);
+		ArrayList<SubCell> select = new ArrayList<>();
 
-				// System.out.println(this.listSTC.size());
-				this.listSTC.add(new Edge(start, end));
+		matrix[cellrobot.column][cellrobot.row].added = false;
 
-				if (neighbors.get(0) != null) {
-					if (end.column == neighbors.get(0).column
-							&& end.row == neighbors.get(0).row) {
-
-						matrix[start.column][start.row - 1].left = false;
-						matrix[start.column][start.row - 2].left = false;
-						matrix[start.column - 1][start.row - 1].right = false;
-						matrix[start.column - 1][start.row - 2].right = false;
-					}
-				}
-				if (neighbors.get(1) != null) {
-					if (end.column == neighbors.get(1).column
-							&& end.row == neighbors.get(1).row) {
-						matrix[start.column - 1][start.row].top = false;
-						matrix[start.column - 2][start.row].top = false;
-						matrix[start.column - 1][start.row - 1].down = false;
-						matrix[start.column - 2][start.row - 1].down = false;
-					}
-				}
-				if (neighbors.get(2) != null) {
-					if (end.column == neighbors.get(2).column
-							&& end.row == neighbors.get(2).row) {
-						matrix[start.column][start.row].left = false;
-						matrix[start.column - 1][start.row].right = false;
-						matrix[start.column][start.row + 1].left = false;
-						matrix[start.column - 1][start.row + 1].right = false;
-					}
-				}
-				if (neighbors.get(3) != null) {
-					if (end.column == neighbors.get(3).column
-							&& end.row == neighbors.get(3).row) {
-						matrix[start.column][start.row].top = false;
-						matrix[start.column][start.row - 1].down = false;
-						matrix[start.column + 1][start.row - 1].down = false;
-						matrix[start.column + 1][start.row].top = false;
+		tmp.column = cellrobot.column + 1;
+		tmp.row = cellrobot.row;
+		if (matrix[cellrobot.column][cellrobot.row].right) {
+			if (checkNotOver(tmp.column, tmp.row)) { // kiểm tra tmp có vượt quá
+														// khỏi bản đồ không
+				if (matrix[tmp.column][tmp.row].valuebigcell) { // xem khối đó
+																// có thuộc khối
+																// lớn có thể đi
+																// được k?
+					if (matrix[tmp.column][tmp.row].added) { // kiểm tra subcell
+																// đã thuộc hàng
+																// đợi hay chưa?
+						select.add(matrix[tmp.column][tmp.row]);
 					}
 				}
 			}
 		}
+		tmp.column = cellrobot.column;
+		tmp.row = cellrobot.row + 1;
+		if (matrix[cellrobot.column][cellrobot.row].down) {
+			if (checkNotOver(tmp.column, tmp.row)
+					&& matrix[tmp.column][tmp.row].valuebigcell
+					&& matrix[tmp.column][tmp.row].added) {
+				select.add(matrix[tmp.column][tmp.row]);
+			}
+		}
+
+		tmp.column = cellrobot.column - 1;
+		tmp.row = cellrobot.row;
+		if (matrix[cellrobot.column][cellrobot.row].left) {
+			if (checkNotOver(tmp.column, tmp.row)
+					&& matrix[tmp.column][tmp.row].valuebigcell
+					&& matrix[tmp.column][tmp.row].added) {
+				select.add(matrix[tmp.column][tmp.row]);
+			}
+		}
+
+		tmp.column = cellrobot.column;
+		tmp.row = cellrobot.row - 1;
+		if (matrix[cellrobot.column][cellrobot.row].top) {
+			if (checkNotOver(tmp.column, tmp.row)
+					&& matrix[tmp.column][tmp.row].valuebigcell
+					&& matrix[tmp.column][tmp.row].added) {
+				select.add(matrix[tmp.column][tmp.row]);
+			}
+		}
+		if (!select.isEmpty()) {
+			for (SubCell abc : select) {
+				if (checkDirection(abc, cellrobot)) {
+					// uu tien cung canh
+					return abc;
+				} else {
+					if ((abc.column / 2 == cellrobot.column / 2)
+							&& (abc.row / 2 == cellrobot.row / 2)) {
+						// uu tien cung CELL
+						return abc;
+					}
+				}
+			}
+		}
+		if (select.isEmpty()) {
+			return null;
+		} else {
+			return select.get(0);
+		}
+	}
+
+	public boolean checkDirection(SubCell a, SubCell b) {
+		a = matrix[a.column][a.row];
+		b = matrix[b.column][b.row];
+		return (!a.top && !b.top) || (!a.down && !b.down)
+				|| (!a.left && !b.left) || (!a.right && !b.right);
 	}
 }

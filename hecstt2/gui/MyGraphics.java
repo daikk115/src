@@ -71,7 +71,6 @@ public class MyGraphics extends JFrame {
 	private Rectangle screen;
 
 	public MyRobot robot = new MyRobot(0, 0); // khởi tạo tọa độ robot, tạo độ
-												// điểm ảnh
 
 	private BufferedImage img;
 
@@ -134,7 +133,6 @@ public class MyGraphics extends JFrame {
 		// tạo JPanel để xây dựng maps và khởi tạo mảng Subcell để mô hình hóa
 		// maps thành ma trận
 		mapconfig.ConfigSize(screen.width - 300, screen.height);
-
 		// Khởi tạo image để gán cho giao diện bản đồ
 		img = new BufferedImage(mapconfig.width + 1, mapconfig.height + 1,
 				BufferedImage.TYPE_INT_RGB);

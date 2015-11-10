@@ -9,9 +9,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class OnLine extends Algorithm {
-	int numberCols = 1;
-	int numberRows = 1;
-	SubCell robotCell = new SubCell(0, 0);
+	int numberCols = 0;
+	int numberRows = 0;
 
 	public OnLine(MyGraphics frame) {
 		super(frame);
@@ -23,103 +22,16 @@ public class OnLine extends Algorithm {
 		onlineSTC(null, new SubCell(1, 1));
 	}
 
-	public void move2(SubCell currentCell, SubCell nextCell) {
-		SubCell startCell = new SubCell(0, 0);
-		SubCell endCell = new SubCell(0, 0);
-		do {
-			startCell.column = robotCell.column;
-			startCell.row = robotCell.row;
-			System.out.println("Start : " + startCell.column + "x"
-					+ startCell.row);
-			endCell = robotNextStep(startCell);
-			if (endCell == null) {
-				break;
-			}
-			if (endCell.column == startCell.column) {
-				if (endCell.row > startCell.row) {
-					for (int i = robot.y; i <= endCell.row * mapconfig.cell; i += 2) {
-						try {
-							robot.y = i;
-							Thread.sleep(20);
-							this.frame.repaint(robot.x, robot.y,
-									mapconfig.cell, mapconfig.cell);
-						} catch (InterruptedException ex) {
-							Logger.getLogger(MyGraphics.class.getName()).log(
-									Level.SEVERE, null, ex);
-						}
-					}
-				} else {
-					for (int i = robot.y; i >= endCell.row * mapconfig.cell; i -= 2) {
-						try {
-							robot.y = i;
-							Thread.sleep(20);
-							frame.repaint(robot.x, robot.y, mapconfig.cell,
-									mapconfig.cell);
-						} catch (InterruptedException ex) {
-							Logger.getLogger(MyGraphics.class.getName()).log(
-									Level.SEVERE, null, ex);
-						}
-					}
-				}
-			} else {
-				if (endCell.column > startCell.column) {
-					for (int i = robot.x; i <= endCell.column * mapconfig.cell; i += 2) {
-						try {
-							robot.x = i;
-							Thread.sleep(10);
-							frame.repaint(robot.x, robot.y, mapconfig.cell,
-									mapconfig.cell);
-						} catch (InterruptedException ex) {
-							Logger.getLogger(MyGraphics.class.getName()).log(
-									Level.SEVERE, null, ex);
-						}
-					}
-				} else {
-					for (int i = robot.x; i >= endCell.column * mapconfig.cell; i -= 2) {
-						try {
-							robot.x = i;
-							Thread.sleep(10);
-							frame.repaint(robot.x, robot.y, mapconfig.cell,
-									mapconfig.cell);
-						} catch (InterruptedException ex) {
-							Logger.getLogger(MyGraphics.class.getName()).log(
-									Level.SEVERE, null, ex);
-						}
-					}
-				}
-				try {
-					Thread.sleep(100);
-				} catch (InterruptedException ex) {
-					Logger.getLogger(OffLine.class.getName()).log(Level.SEVERE,
-							null, ex);
-				}
-				frame.repaint(robot.x, robot.y, mapconfig.cell, mapconfig.cell);
-			}
-			startCell.column = endCell.column;
-			startCell.row = endCell.row;
-		} while (!isInBigCell(endCell, nextCell));
-
-		robotCell.column = endCell.column;
-		robotCell.row = endCell.row;
-		System.out.println("Robot : " + robotCell.column + "x" + robotCell.row);
-	}
-
-	/*
-	 * Kiem tra xem checkCell co nam trong BigCell dai dien boi bigCell
-	 */
-	public boolean isInBigCell(SubCell checkCell, SubCell bigCell) {
-		return (((checkCell.column == bigCell.column) && (checkCell.row == bigCell.row))
-				|| ((checkCell.column == bigCell.column) && (checkCell.row == bigCell.row - 1))
-				|| ((checkCell.column == bigCell.column - 1) && (checkCell.row == bigCell.row)) || ((checkCell.column == bigCell.column - 1) && (checkCell.row - 1 == bigCell.row - 1)));
-	}
-
 	/*
 	 * Di chuyen giua 2 subcell
 	 */
 	public void move(SubCell currentCell, SubCell nextCell) {
+		System.out.println("Move from " + currentCell.column + "x"
+				+ currentCell.row + " to " + nextCell.column + "x"
+				+ nextCell.row);
 		if (nextCell.column == currentCell.column) {
 			if (nextCell.row > currentCell.row) {
-				for (int i = robot.y; i <= nextCell.row * mapconfig.cell; i += 2) {
+				for (int i = robot.y; i <= (nextCell.row + 1) * mapconfig.cell; i += 2) {
 					try {
 						robot.y = i;
 						Thread.sleep(20);
@@ -131,7 +43,7 @@ public class OnLine extends Algorithm {
 					}
 				}
 			} else {
-				for (int i = robot.y; i >= nextCell.row * mapconfig.cell; i -= 2) {
+				for (int i = robot.y; i >= (nextCell.row - 1) * mapconfig.cell; i -= 2) {
 					try {
 						robot.y = i;
 						Thread.sleep(20);
@@ -176,6 +88,8 @@ public class OnLine extends Algorithm {
 						null, ex);
 			}
 			frame.repaint(robot.x, robot.y, mapconfig.cell, mapconfig.cell);
+			// currentCell.column = nextCell.column;
+			// currentCell.row = nextCell.row;
 		}
 	}
 
@@ -191,10 +105,6 @@ public class OnLine extends Algorithm {
 		} else {
 			distanceRow = distance(parentCell, currentCell)[0];
 			distanceCol = distance(parentCell, currentCell)[1];
-			System.out.println("Distance : " + parentCell.column + " "
-					+ currentCell.column);
-			System.out.println("Distance : " + parentCell.row + " "
-					+ currentCell.row);
 			SubCell n1 = null, n2 = null, n3 = null, n4 = null;
 			if (currentCell.row >= 2) {
 				n1 = matrix[currentCell.column][currentCell.row - 2];
@@ -349,6 +259,21 @@ public class OnLine extends Algorithm {
 		return distance;
 	}
 
+	public void checkMove(SubCell currentCell, SubCell nextCell) {
+		int distanceRow = distance(currentCell, nextCell)[0];
+		int distanceCol = distance(currentCell, nextCell)[1];
+		// xet dieu kien chua du, trong th moveback k dung
+		if ((distanceCol == -2) || (distanceRow == -2)) {
+			move(matrix[currentCell.column][currentCell.row - 1],
+					matrix[nextCell.column][nextCell.row - 1]);
+		}
+
+		if ((distanceCol == 2) || (distanceRow == 2)) {
+			move(matrix[currentCell.column - 1][currentCell.row],
+					matrix[nextCell.column - 1][nextCell.row]);
+		}
+	}
+
 	/*
 	 * Online STC
 	 */
@@ -362,13 +287,13 @@ public class OnLine extends Algorithm {
 			constructST(currentCell, neighbors.get(i));
 			this.frame.repaint();
 			System.out.println("Move forward");
-			move2(currentCell, neighbors.get(i));
+			checkMove(currentCell, neighbors.get(i));
 			onlineSTC(currentCell, neighbors.get(i));
 		}
 
 		if (!isStart(currentCell)) {
 			System.out.println("Move back");
-			move2(currentCell, parentCell);
+			checkMove(currentCell, parentCell);
 		}
 
 		if (!matrix[parentCell.column][parentCell.row].valuebigcell) {
