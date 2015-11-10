@@ -23,6 +23,15 @@ public class OnLine extends Algorithm {
 		onlineSTC(null, new SubCell(1, 1));
 	}
 
+	/*
+	 * Check Block, thay vi dung checkAllBlock khong dung! Y tuong: co vi tri
+	 * robot -> tim ra BigCell no dang nam, quet checkBlock,BigCell day va
+	 * neighbors cua no, gan gia tri boolean
+	 */
+	public void checkBlock() {
+
+	}
+
 	public void move2(SubCell currentCell, SubCell nextCell) {
 		SubCell startCell = new SubCell(0, 0);
 		SubCell endCell = new SubCell(0, 0);
@@ -191,10 +200,6 @@ public class OnLine extends Algorithm {
 		} else {
 			distanceRow = distance(parentCell, currentCell)[0];
 			distanceCol = distance(parentCell, currentCell)[1];
-			System.out.println("Distance : " + parentCell.column + " "
-					+ currentCell.column);
-			System.out.println("Distance : " + parentCell.row + " "
-					+ currentCell.row);
 			SubCell n1 = null, n2 = null, n3 = null, n4 = null;
 			if (currentCell.row >= 2) {
 				n1 = matrix[currentCell.column][currentCell.row - 2];
