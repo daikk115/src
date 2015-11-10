@@ -176,68 +176,74 @@ public class Algorithm extends Thread {
 				&& y < mapconfig.numberrows;
 	}
 
-	public SubCell robotNextStep(SubCell cellrobot) {
+	/*
+	 * Phuong thuc tim vi tri di tiep theo cho robot. Bien boolean xac dinh
+	 * truong hop su dung online / offline
+	 */
+	public SubCell robotNextStep(boolean online, SubCell robotCell) {
 
 		// xét 4 hướng thôi
 		SubCell tmp = new SubCell(0, 0);
 		ArrayList<SubCell> select = new ArrayList<>();
 
-		matrix[cellrobot.column][cellrobot.row].added = false;
+		matrix[robotCell.column][robotCell.row].added = false;
 
-		tmp.column = cellrobot.column + 1;
-		tmp.row = cellrobot.row;
-		if (matrix[cellrobot.column][cellrobot.row].right) {
+		tmp.column = robotCell.column + 1;
+		tmp.row = robotCell.row;
+		if (matrix[robotCell.column][robotCell.row].right) {
 			if (checkNotOver(tmp.column, tmp.row)) { // kiểm tra tmp có vượt quá
 														// khỏi bản đồ không
 				if (matrix[tmp.column][tmp.row].valuebigcell) { // xem khối đó
 																// có thuộc khối
 																// lớn có thể đi
 																// được k?
-					if (matrix[tmp.column][tmp.row].added) { // kiểm tra subcell
-																// đã thuộc hàng
-																// đợi hay chưa?
+					if (matrix[tmp.column][tmp.row].added || online) { // kiểm
+																		// tra
+																		// subcell
+						// đã thuộc hàng
+						// đợi hay chưa?
 						select.add(matrix[tmp.column][tmp.row]);
 					}
 				}
 			}
 		}
-		tmp.column = cellrobot.column;
-		tmp.row = cellrobot.row + 1;
-		if (matrix[cellrobot.column][cellrobot.row].down) {
+		tmp.column = robotCell.column;
+		tmp.row = robotCell.row + 1;
+		if (matrix[robotCell.column][robotCell.row].down) {
 			if (checkNotOver(tmp.column, tmp.row)
 					&& matrix[tmp.column][tmp.row].valuebigcell
-					&& matrix[tmp.column][tmp.row].added) {
+					&& (matrix[tmp.column][tmp.row].added || online)) {
 				select.add(matrix[tmp.column][tmp.row]);
 			}
 		}
 
-		tmp.column = cellrobot.column - 1;
-		tmp.row = cellrobot.row;
-		if (matrix[cellrobot.column][cellrobot.row].left) {
+		tmp.column = robotCell.column - 1;
+		tmp.row = robotCell.row;
+		if (matrix[robotCell.column][robotCell.row].left) {
 			if (checkNotOver(tmp.column, tmp.row)
 					&& matrix[tmp.column][tmp.row].valuebigcell
-					&& matrix[tmp.column][tmp.row].added) {
+					&& (matrix[tmp.column][tmp.row].added || online)) {
 				select.add(matrix[tmp.column][tmp.row]);
 			}
 		}
 
-		tmp.column = cellrobot.column;
-		tmp.row = cellrobot.row - 1;
-		if (matrix[cellrobot.column][cellrobot.row].top) {
+		tmp.column = robotCell.column;
+		tmp.row = robotCell.row - 1;
+		if (matrix[robotCell.column][robotCell.row].top) {
 			if (checkNotOver(tmp.column, tmp.row)
 					&& matrix[tmp.column][tmp.row].valuebigcell
-					&& matrix[tmp.column][tmp.row].added) {
+					&& (matrix[tmp.column][tmp.row].added || online)) {
 				select.add(matrix[tmp.column][tmp.row]);
 			}
 		}
 		if (!select.isEmpty()) {
 			for (SubCell abc : select) {
-				if (checkDirection(abc, cellrobot)) {
+				if (checkDirection(abc, robotCell)) {
 					// uu tien cung canh
 					return abc;
 				} else {
-					if ((abc.column / 2 == cellrobot.column / 2)
-							&& (abc.row / 2 == cellrobot.row / 2)) {
+					if ((abc.column / 2 == robotCell.column / 2)
+							&& (abc.row / 2 == robotCell.row / 2)) {
 						// uu tien cung CELL
 						return abc;
 					}

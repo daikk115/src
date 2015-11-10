@@ -31,7 +31,7 @@ public class OnLine extends Algorithm {
 			startCell.row = robotCell.row;
 			System.out.println("Start : " + startCell.column + "x"
 					+ startCell.row);
-			endCell = robotNextStep(startCell);
+			endCell = robotNextStep(true, startCell);
 			if (endCell == null) {
 				break;
 			}
@@ -97,7 +97,7 @@ public class OnLine extends Algorithm {
 			}
 			startCell.column = endCell.column;
 			startCell.row = endCell.row;
-		} while (!isInBigCell(endCell, nextCell));
+		} while (isInBigCell(endCell, nextCell));
 
 		robotCell.column = endCell.column;
 		robotCell.row = endCell.row;
