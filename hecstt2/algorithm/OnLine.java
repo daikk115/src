@@ -24,15 +24,75 @@ public class OnLine extends Algorithm {
 	}
 
 	/*
+	 * Online STC
+	 */
+	public void onlineSTC(SubCell parentCell, SubCell currentCell) {
+		ArrayList<SubCell> neighbors = neighbors(parentCell, currentCell);
+		checkBlock2(currentCell);
+		for (int i = 0; i < neighbors.size(); i++) {
+			if (!(matrix[neighbors.get(i).column][neighbors.get(i).row].valuebigcell))
+				continue;
+			constructST(currentCell, neighbors.get(i));
+			this.frame.repaint();
+			System.out.println("Move forward");
+			move(currentCell, neighbors.get(i));
+			onlineSTC(currentCell, neighbors.get(i));
+		}
+
+		if (!isStart(currentCell)) {
+			System.out.println("Move back");
+			move(currentCell, parentCell);
+		}
+
+		if (!(matrix[parentCell.column][parentCell.row].valuebigcell)) {
+			onlineSTC(currentCell, parentCell);
+		}
+	}
+
+	/*
 	 * Check Block, thay vi dung checkAllBlock khong dung! Y tuong: co vi tri
 	 * robot -> tim ra BigCell no dang nam, quet checkBlock,BigCell day va
 	 * neighbors cua no, gan gia tri boolean
 	 */
 	public void checkBlock() {
-
+		int bigCellCol = robotCell.column / 2;
+		int bigCellRow = robotCell.row / 2;
+		for (int i = (((bigCellCol * 2 - 2) >= 0) ? (bigCellCol * 2 - 2) : 0); i <= (((bigCellCol * 2 + 2) < mapconfig.numbercolumns) ? (bigCellCol * 2 + 2)
+				: (bigCellCol * 2)); i += 2) {
+			for (int j = (((bigCellRow * 2 - 2) >= 0) ? (bigCellRow * 2 - 2)
+					: 0); j <= (((bigCellRow * 2 + 2) < mapconfig.numberrows) ? (bigCellRow * 2 + 2)
+					: (bigCellRow * 2)); j += 2) {
+				if (!(matrix[i][j].value && matrix[i + 1][j].value
+						&& matrix[i][j + 1].value && matrix[i + 1][j + 1].value)) {
+					matrix[i][j].valuebigcell = false;
+					matrix[i][j + 1].valuebigcell = false;
+					matrix[i + 1][j].valuebigcell = false;
+					matrix[i + 1][j + 1].valuebigcell = false;
+				}
+			}
+		}
+	}
+	
+	public void checkBlock2(SubCell currentCell) {
+		int bigCellCol = currentCell.column / 2;
+		int bigCellRow = currentCell.row / 2;
+		for (int i = (((bigCellCol * 2 - 2) >= 0) ? (bigCellCol * 2 - 2) : 0); i <= (((bigCellCol * 2 + 2) < mapconfig.numbercolumns) ? (bigCellCol * 2 + 2)
+				: (bigCellCol * 2)); i += 2) {
+			for (int j = (((bigCellRow * 2 - 2) >= 0) ? (bigCellRow * 2 - 2)
+					: 0); j <= (((bigCellRow * 2 + 2) < mapconfig.numberrows) ? (bigCellRow * 2 + 2)
+					: (bigCellRow * 2)); j += 2) {
+				if (!(matrix[i][j].value && matrix[i + 1][j].value
+						&& matrix[i][j + 1].value && matrix[i + 1][j + 1].value)) {
+					matrix[i][j].valuebigcell = false;
+					matrix[i][j + 1].valuebigcell = false;
+					matrix[i + 1][j].valuebigcell = false;
+					matrix[i + 1][j + 1].valuebigcell = false;
+				}
+			}
+		}
 	}
 
-	public void move2(SubCell currentCell, SubCell nextCell) {
+	public void move(SubCell currentCell, SubCell nextCell) {
 		SubCell startCell = new SubCell(0, 0);
 		SubCell endCell = new SubCell(0, 0);
 		do {
@@ -123,72 +183,6 @@ public class OnLine extends Algorithm {
 	}
 
 	/*
-	 * Di chuyen giua 2 subcell
-	 */
-	public void move(SubCell currentCell, SubCell nextCell) {
-		if (nextCell.column == currentCell.column) {
-			if (nextCell.row > currentCell.row) {
-				for (int i = robot.y; i <= nextCell.row * mapconfig.cell; i += 2) {
-					try {
-						robot.y = i;
-						Thread.sleep(20);
-						this.frame.repaint(robot.x, robot.y, mapconfig.cell,
-								mapconfig.cell);
-					} catch (InterruptedException ex) {
-						Logger.getLogger(MyGraphics.class.getName()).log(
-								Level.SEVERE, null, ex);
-					}
-				}
-			} else {
-				for (int i = robot.y; i >= nextCell.row * mapconfig.cell; i -= 2) {
-					try {
-						robot.y = i;
-						Thread.sleep(20);
-						frame.repaint(robot.x, robot.y, mapconfig.cell,
-								mapconfig.cell);
-					} catch (InterruptedException ex) {
-						Logger.getLogger(MyGraphics.class.getName()).log(
-								Level.SEVERE, null, ex);
-					}
-				}
-			}
-		} else {
-			if (nextCell.column > currentCell.column) {
-				for (int i = robot.x; i <= nextCell.column * mapconfig.cell; i += 2) {
-					try {
-						robot.x = i;
-						Thread.sleep(10);
-						frame.repaint(robot.x, robot.y, mapconfig.cell,
-								mapconfig.cell);
-					} catch (InterruptedException ex) {
-						Logger.getLogger(MyGraphics.class.getName()).log(
-								Level.SEVERE, null, ex);
-					}
-				}
-			} else {
-				for (int i = robot.x; i >= nextCell.column * mapconfig.cell; i -= 2) {
-					try {
-						robot.x = i;
-						Thread.sleep(10);
-						frame.repaint(robot.x, robot.y, mapconfig.cell,
-								mapconfig.cell);
-					} catch (InterruptedException ex) {
-						Logger.getLogger(MyGraphics.class.getName()).log(
-								Level.SEVERE, null, ex);
-					}
-				}
-			}
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException ex) {
-				Logger.getLogger(OffLine.class.getName()).log(Level.SEVERE,
-						null, ex);
-			}
-			frame.repaint(robot.x, robot.y, mapconfig.cell, mapconfig.cell);
-		}
-	}
-
-	/*
 	 * Trả về danh sách hàng xóm của một Cell dựa trên vị trí Cell cha.
 	 */
 	public ArrayList<SubCell> neighbors(SubCell parentCell, SubCell currentCell) {
@@ -257,17 +251,6 @@ public class OnLine extends Algorithm {
 		}
 
 		return neighbors;
-	}
-
-	/*
-	 * Phuong thuc tinh so hang + so cot da duoc duyet! Chua tham dinh tinh chac
-	 * chan
-	 */
-	public void countNumber(SubCell currentCell, SubCell nextCell) {
-		if (Math.abs(nextCell.column) > numberCols)
-			numberCols = nextCell.column;
-		if (Math.abs(nextCell.row) > numberRows)
-			numberRows = nextCell.row;
 	}
 
 	/*
@@ -352,32 +335,5 @@ public class OnLine extends Algorithm {
 		distance[0] = currentCell.row - nextCell.row;
 		distance[1] = currentCell.column - nextCell.column;
 		return distance;
-	}
-
-	/*
-	 * Online STC
-	 */
-	public void onlineSTC(SubCell parentCell, SubCell currentCell) {
-		ArrayList<SubCell> neighbors = neighbors(parentCell, currentCell);
-		checkAllBlock(numberCols, numberRows);
-		for (int i = 0; i < neighbors.size(); i++) {
-			countNumber(currentCell, neighbors.get(i));
-			if (!matrix[neighbors.get(i).column][neighbors.get(i).row].valuebigcell)
-				continue;
-			constructST(currentCell, neighbors.get(i));
-			this.frame.repaint();
-			System.out.println("Move forward");
-			move2(currentCell, neighbors.get(i));
-			onlineSTC(currentCell, neighbors.get(i));
-		}
-
-		if (!isStart(currentCell)) {
-			System.out.println("Move back");
-			move2(currentCell, parentCell);
-		}
-
-		if (!matrix[parentCell.column][parentCell.row].valuebigcell) {
-			onlineSTC(currentCell, parentCell);
-		}
 	}
 }
