@@ -188,6 +188,16 @@ public class Algorithm extends Thread {
 
 		matrix[robotCell.column][robotCell.row].added = false;
 
+		tmp.column = robotCell.column;
+		tmp.row = robotCell.row + 1;
+		if (matrix[robotCell.column][robotCell.row].down) {
+			if (checkNotOver(tmp.column, tmp.row)
+					&& matrix[tmp.column][tmp.row].valuebigcell
+					&& (matrix[tmp.column][tmp.row].added || online)) {
+				select.add(matrix[tmp.column][tmp.row]);
+			}
+		}
+
 		tmp.column = robotCell.column + 1;
 		tmp.row = robotCell.row;
 		if (matrix[robotCell.column][robotCell.row].right) {
@@ -207,9 +217,10 @@ public class Algorithm extends Thread {
 				}
 			}
 		}
+		
 		tmp.column = robotCell.column;
-		tmp.row = robotCell.row + 1;
-		if (matrix[robotCell.column][robotCell.row].down) {
+		tmp.row = robotCell.row - 1;
+		if (matrix[robotCell.column][robotCell.row].top) {
 			if (checkNotOver(tmp.column, tmp.row)
 					&& matrix[tmp.column][tmp.row].valuebigcell
 					&& (matrix[tmp.column][tmp.row].added || online)) {
@@ -227,15 +238,6 @@ public class Algorithm extends Thread {
 			}
 		}
 
-		tmp.column = robotCell.column;
-		tmp.row = robotCell.row - 1;
-		if (matrix[robotCell.column][robotCell.row].top) {
-			if (checkNotOver(tmp.column, tmp.row)
-					&& matrix[tmp.column][tmp.row].valuebigcell
-					&& (matrix[tmp.column][tmp.row].added || online)) {
-				select.add(matrix[tmp.column][tmp.row]);
-			}
-		}
 		if (!select.isEmpty()) {
 			for (SubCell abc : select) {
 				if (checkDirection(abc, robotCell)) {
