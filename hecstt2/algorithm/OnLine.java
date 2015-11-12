@@ -39,7 +39,7 @@ public class OnLine extends Algorithm {
 			onlineSTC(currentCell, neighbors.get(i));
 		}
 
-		if (!isStart(currentCell)) {
+		if (isStart(currentCell)) {
 			System.out.println("Move back");
 			move(currentCell, parentCell);
 		}
@@ -93,6 +93,9 @@ public class OnLine extends Algorithm {
 		}
 	}
 
+	/*
+	 * Di chuyen robot
+	 */
 	public void move(SubCell currentCell, SubCell nextCell) {
 		SubCell startCell = new SubCell(0, 0);
 		SubCell endCell = new SubCell(0, 0);
@@ -102,9 +105,11 @@ public class OnLine extends Algorithm {
 			System.out.println("Start : " + startCell.column + "x"
 					+ startCell.row);
 			endCell = robotNextStep(startCell);
+
 			if (endCell == null) {
 				break;
 			}
+
 			if (endCell.column == startCell.column) {
 				if (endCell.row > startCell.row) {
 					for (int i = robot.y; i <= endCell.row * mapconfig.cell; i += 2) {
@@ -246,14 +251,14 @@ public class OnLine extends Algorithm {
 				System.out.println("Loi khi add neighbors");
 			}
 		}
-
-		for (int i = 0; i < neighbors.size(); i++) {
-			if (parentCell != null)
-				System.out.println("Parent:" + parentCell.column + "x"
-						+ parentCell.row + " - Neighbors of "
-						+ currentCell.column + "x" + currentCell.row + ":"
-						+ neighbors.get(i).column + "x" + neighbors.get(i).row);
-		}
+		//
+		// for (int i = 0; i < neighbors.size(); i++) {
+		// if (parentCell != null)
+		// System.out.println("Parent:" + parentCell.column + "x"
+		// + parentCell.row + " - Neighbors of "
+		// + currentCell.column + "x" + currentCell.row + ":"
+		// + neighbors.get(i).column + "x" + neighbors.get(i).row);
+		// }
 
 		return neighbors;
 	}
@@ -264,7 +269,7 @@ public class OnLine extends Algorithm {
 	public boolean isStart(SubCell currentCell) {
 		return ((currentCell.column == 1 && currentCell.row == 1)
 				|| (currentCell.column == 0 && currentCell.row == 0)
-				|| (currentCell.column == 0 && currentCell.row == 1) || (currentCell.row == 1 && currentCell.column == 0));
+				|| (currentCell.column == 0 && currentCell.row == 1) || (currentCell.column == 1 && currentCell.row == 0));
 	}
 
 	/*
