@@ -180,7 +180,7 @@ public class Algorithm extends Thread {
 	 * Phuong thuc tim vi tri di tiep theo cho robot. Bien boolean xac dinh
 	 * truong hop su dung online / offline
 	 */
-	public SubCell robotNextStep(boolean online, SubCell robotCell) {
+	public SubCell robotNextStep(SubCell robotCell) {
 
 		// xét 4 hướng thôi
 		SubCell tmp = new SubCell(0, 0);
@@ -189,11 +189,31 @@ public class Algorithm extends Thread {
 		matrix[robotCell.column][robotCell.row].added = false;
 
 		tmp.column = robotCell.column;
+		tmp.row = robotCell.row - 1;
+		if (matrix[robotCell.column][robotCell.row].top) {
+			if (checkNotOver(tmp.column, tmp.row)
+					&& matrix[tmp.column][tmp.row].valuebigcell
+					&& (matrix[tmp.column][tmp.row].added)) {
+				select.add(matrix[tmp.column][tmp.row]);
+			}
+		}
+
+		tmp.column = robotCell.column - 1;
+		tmp.row = robotCell.row;
+		if (matrix[robotCell.column][robotCell.row].left) {
+			if (checkNotOver(tmp.column, tmp.row)
+					&& matrix[tmp.column][tmp.row].valuebigcell
+					&& (matrix[tmp.column][tmp.row].added)) {
+				select.add(matrix[tmp.column][tmp.row]);
+			}
+		}
+
+		tmp.column = robotCell.column;
 		tmp.row = robotCell.row + 1;
 		if (matrix[robotCell.column][robotCell.row].down) {
 			if (checkNotOver(tmp.column, tmp.row)
 					&& matrix[tmp.column][tmp.row].valuebigcell
-					&& (matrix[tmp.column][tmp.row].added || online)) {
+					&& (matrix[tmp.column][tmp.row].added)) {
 				select.add(matrix[tmp.column][tmp.row]);
 			}
 		}
@@ -207,34 +227,14 @@ public class Algorithm extends Thread {
 																// có thuộc khối
 																// lớn có thể đi
 																// được k?
-					if (matrix[tmp.column][tmp.row].added || online) { // kiểm
-																		// tra
-																		// subcell
+					if (matrix[tmp.column][tmp.row].added) { // kiểm
+																// tra
+																// subcell
 						// đã thuộc hàng
 						// đợi hay chưa?
 						select.add(matrix[tmp.column][tmp.row]);
 					}
 				}
-			}
-		}
-		
-		tmp.column = robotCell.column;
-		tmp.row = robotCell.row - 1;
-		if (matrix[robotCell.column][robotCell.row].top) {
-			if (checkNotOver(tmp.column, tmp.row)
-					&& matrix[tmp.column][tmp.row].valuebigcell
-					&& (matrix[tmp.column][tmp.row].added || online)) {
-				select.add(matrix[tmp.column][tmp.row]);
-			}
-		}
-
-		tmp.column = robotCell.column - 1;
-		tmp.row = robotCell.row;
-		if (matrix[robotCell.column][robotCell.row].left) {
-			if (checkNotOver(tmp.column, tmp.row)
-					&& matrix[tmp.column][tmp.row].valuebigcell
-					&& (matrix[tmp.column][tmp.row].added || online)) {
-				select.add(matrix[tmp.column][tmp.row]);
 			}
 		}
 

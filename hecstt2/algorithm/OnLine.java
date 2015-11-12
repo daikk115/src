@@ -72,8 +72,9 @@ public class OnLine extends Algorithm {
 			}
 		}
 	}
-	
+
 	public void checkBlock2(SubCell currentCell) {
+		checkBlock();
 		int bigCellCol = currentCell.column / 2;
 		int bigCellRow = currentCell.row / 2;
 		for (int i = (((bigCellCol * 2 - 2) >= 0) ? (bigCellCol * 2 - 2) : 0); i <= (((bigCellCol * 2 + 2) < mapconfig.numbercolumns) ? (bigCellCol * 2 + 2)
@@ -100,7 +101,7 @@ public class OnLine extends Algorithm {
 			startCell.row = robotCell.row;
 			System.out.println("Start : " + startCell.column + "x"
 					+ startCell.row);
-			endCell = robotNextStep(true, startCell);
+			endCell = robotNextStep(startCell);
 			if (endCell == null) {
 				break;
 			}
@@ -189,6 +190,10 @@ public class OnLine extends Algorithm {
 		ArrayList<SubCell> neighbors = new ArrayList<>();
 		int distanceCol, distanceRow;
 		if (parentCell == null) {
+			matrix[currentCell.column][currentCell.row].added = true;
+			matrix[currentCell.column - 1][currentCell.row].added = true;
+			matrix[currentCell.column][currentCell.row - 1].added = true;
+			matrix[currentCell.column - 1][currentCell.row - 1].added = true;
 			neighbors.add(matrix[currentCell.column][currentCell.row + 2]);
 			neighbors.add(matrix[currentCell.column + 2][currentCell.row]);
 		} else {
@@ -262,6 +267,9 @@ public class OnLine extends Algorithm {
 				|| (currentCell.column == 0 && currentCell.row == 1) || (currentCell.row == 1 && currentCell.column == 0));
 	}
 
+	/*
+	 * Xay dung cay khung Edge giua 2 Cell co 2 Subcell dai dien start,end
+	 */
 	public void constructST(SubCell start, SubCell end) {
 		ArrayList<SubCell> neighbors = new ArrayList<>();
 		SubCell n1 = null, n2 = null, n3 = null, n4 = null;
@@ -283,9 +291,9 @@ public class OnLine extends Algorithm {
 					&& !matrix[end.column][end.row].added
 					&& matrix[end.column][end.row].valuebigcell) {
 				matrix[end.column][end.row].added = true;
-				// matrix[end.column - 1][end.row].added = true;
-				// matrix[end.column][end.row - 1].added = true;
-				// matrix[end.column - 1][end.row - 1].added = true;
+				matrix[end.column - 1][end.row].added = true;
+				matrix[end.column][end.row - 1].added = true;
+				matrix[end.column - 1][end.row - 1].added = true;
 
 				this.listSTC.add(new Edge(start, end));
 

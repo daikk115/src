@@ -39,8 +39,8 @@ public class OffLine extends Algorithm {
 		// Dựa vào điểm này, chúng ta sử dụng nó vơi chức năng ngược lại để di
 		// chuyển theo cây khung.
 		do {
-			nextcell = robotNextStep(false, current); // sau khi lấy vị trí tiếp
-														// theo,
+			nextcell = robotNextStep(current); // sau khi lấy vị trí tiếp
+												// theo,
 			// cho con robot chạy tới vị trí
 			// đó từ từ
 			if (nextcell == null) {
