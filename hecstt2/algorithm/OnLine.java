@@ -99,15 +99,19 @@ public class OnLine extends Algorithm {
 	public void move(SubCell currentCell, SubCell nextCell) {
 		SubCell startCell = new SubCell(0, 0);
 		SubCell endCell = new SubCell(0, 0);
+		startCell.column = robotCell.column;
+		startCell.row = robotCell.row;
+		
 		do {
-			startCell.column = robotCell.column;
-			startCell.row = robotCell.row;
 			System.out.println("Start : " + startCell.column + "x"
 					+ startCell.row);
 			endCell = robotNextStep(startCell);
 
 			if (endCell == null) {
 				break;
+			} else {
+				System.out.println("End : " + endCell.column + "x"
+						+ endCell.row);
 			}
 
 			if (endCell.column == startCell.column) {
