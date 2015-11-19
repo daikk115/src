@@ -9,9 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class OnLine extends Algorithm {
-	int numberCols = 1;
-	int numberRows = 1;
-	SubCell robotCell = new SubCell(0, 0);
+	private SubCell robotCell = new SubCell(0, 0);
 
 	public OnLine(MyGraphics frame) {
 		super(frame);
@@ -30,7 +28,8 @@ public class OnLine extends Algorithm {
 		ArrayList<SubCell> neighbors = neighbors(parentCell, currentCell);
 		checkBlock2(currentCell);
 		for (int i = 0; i < neighbors.size(); i++) {
-			if (!(matrix[neighbors.get(i).column][neighbors.get(i).row].valuebigcell))
+			if (!(matrix[neighbors.get(i).column][neighbors.get(i).row].valuebigcell)
+					|| matrix[neighbors.get(i).column][neighbors.get(i).row].added)
 				continue;
 			constructST(currentCell, neighbors.get(i));
 			this.frame.repaint();
@@ -39,7 +38,7 @@ public class OnLine extends Algorithm {
 			onlineSTC(currentCell, neighbors.get(i));
 		}
 
-		if (isStart(currentCell)) {
+		if (!isStart(currentCell)) {
 			System.out.println("Move back");
 			move(currentCell, parentCell);
 		}
@@ -101,19 +100,12 @@ public class OnLine extends Algorithm {
 		SubCell endCell = new SubCell(0, 0);
 		startCell.column = robotCell.column;
 		startCell.row = robotCell.row;
-		
-		do {
-			System.out.println("Start : " + startCell.column + "x"
-					+ startCell.row);
-			endCell = robotNextStep(startCell);
 
+		do {
+			endCell = robotNextStep(startCell);
 			if (endCell == null) {
 				break;
-			} else {
-				System.out.println("End : " + endCell.column + "x"
-						+ endCell.row);
 			}
-
 			if (endCell.column == startCell.column) {
 				if (endCell.row > startCell.row) {
 					for (int i = robot.y; i <= endCell.row * mapconfig.cell; i += 2) {
@@ -176,11 +168,9 @@ public class OnLine extends Algorithm {
 			}
 			startCell.column = endCell.column;
 			startCell.row = endCell.row;
+			robotCell.column = endCell.column;
+			robotCell.row = endCell.row;
 		} while (isInBigCell(endCell, nextCell));
-
-		robotCell.column = endCell.column;
-		robotCell.row = endCell.row;
-		System.out.println("Robot : " + robotCell.column + "x" + robotCell.row);
 	}
 
 	/*
@@ -255,14 +245,6 @@ public class OnLine extends Algorithm {
 				System.out.println("Loi khi add neighbors");
 			}
 		}
-		//
-		// for (int i = 0; i < neighbors.size(); i++) {
-		// if (parentCell != null)
-		// System.out.println("Parent:" + parentCell.column + "x"
-		// + parentCell.row + " - Neighbors of "
-		// + currentCell.column + "x" + currentCell.row + ":"
-		// + neighbors.get(i).column + "x" + neighbors.get(i).row);
-		// }
 
 		return neighbors;
 	}
@@ -299,17 +281,15 @@ public class OnLine extends Algorithm {
 			if (checkNotOver(end.column, end.row)
 					&& !matrix[end.column][end.row].added
 					&& matrix[end.column][end.row].valuebigcell) {
+				this.listSTC.add(new Edge(start, end));
 				matrix[end.column][end.row].added = true;
 				matrix[end.column - 1][end.row].added = true;
 				matrix[end.column][end.row - 1].added = true;
 				matrix[end.column - 1][end.row - 1].added = true;
 
-				this.listSTC.add(new Edge(start, end));
-
 				if (neighbors.get(0) != null) {
 					if (end.column == neighbors.get(0).column
 							&& end.row == neighbors.get(0).row) {
-
 						matrix[start.column][start.row - 1].left = false;
 						matrix[start.column][start.row - 2].left = false;
 						matrix[start.column - 1][start.row - 1].right = false;
