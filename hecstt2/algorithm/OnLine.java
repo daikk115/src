@@ -32,7 +32,7 @@ public class OnLine extends Algorithm {
 					|| (matrix[neighbors.get(i).column][neighbors.get(i).row].added))
 				continue;
 			constructST(currentCell, neighbors.get(i));
-			this.frame.repaint();
+			// this.frame.repaint();
 			System.out.println("Move forward");
 			move(currentCell, neighbors.get(i));
 			onlineSTC(currentCell, neighbors.get(i));
@@ -41,10 +41,6 @@ public class OnLine extends Algorithm {
 		if (!isStart(currentCell)) {
 			System.out.println("Move back");
 			move(currentCell, parentCell);
-		}
-
-		if (!(matrix[parentCell.column][parentCell.row].valuebigcell)) {
-			onlineSTC(currentCell, parentCell);
 		}
 	}
 
@@ -166,6 +162,9 @@ public class OnLine extends Algorithm {
 				}
 				frame.repaint(robot.x, robot.y, mapconfig.cell, mapconfig.cell);
 			}
+			System.out.println("->Move from " + startCell.column + "x"
+					+ startCell.row + " to " + endCell.column + "x"
+					+ endCell.row);
 			startCell.column = endCell.column;
 			startCell.row = endCell.row;
 			robotCell.column = endCell.column;

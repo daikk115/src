@@ -78,7 +78,7 @@ public class OffLine extends Algorithm {
 					for (int i = robot.x; i <= nextcell.column * mapconfig.cell; i += 2) {
 						try {
 							robot.x = i;
-							Thread.sleep(10);
+							Thread.sleep(20);
 							frame.repaint(robot.x, robot.y, mapconfig.cell,
 									mapconfig.cell);
 						} catch (InterruptedException ex) {
@@ -90,7 +90,7 @@ public class OffLine extends Algorithm {
 					for (int i = robot.x; i >= nextcell.column * mapconfig.cell; i -= 2) {
 						try {
 							robot.x = i;
-							Thread.sleep(10);
+							Thread.sleep(20);
 							frame.repaint(robot.x, robot.y, mapconfig.cell,
 									mapconfig.cell);
 						} catch (InterruptedException ex) {
