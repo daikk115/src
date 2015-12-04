@@ -186,14 +186,14 @@ public class Algorithm extends Thread {
 		SubCell tmp = new SubCell(0, 0);
 		ArrayList<SubCell> select = new ArrayList<>();
 
-		matrix[robotCell.column][robotCell.row].added = false;
+		matrix[robotCell.column][robotCell.row].addedRNS = true;
 
 		tmp.column = robotCell.column;
 		tmp.row = robotCell.row - 1;
 		if (matrix[robotCell.column][robotCell.row].top) {
 			if (checkNotOver(tmp.column, tmp.row)
 					&& matrix[tmp.column][tmp.row].valuebigcell
-					&& (matrix[tmp.column][tmp.row].added)) {
+					&& !(matrix[tmp.column][tmp.row].addedRNS)) {
 				select.add(matrix[tmp.column][tmp.row]);
 			}
 		}
@@ -203,7 +203,7 @@ public class Algorithm extends Thread {
 		if (matrix[robotCell.column][robotCell.row].left) {
 			if (checkNotOver(tmp.column, tmp.row)
 					&& matrix[tmp.column][tmp.row].valuebigcell
-					&& (matrix[tmp.column][tmp.row].added)) {
+					&& !(matrix[tmp.column][tmp.row].addedRNS)) {
 				select.add(matrix[tmp.column][tmp.row]);
 			}
 		}
@@ -213,7 +213,7 @@ public class Algorithm extends Thread {
 		if (matrix[robotCell.column][robotCell.row].down) {
 			if (checkNotOver(tmp.column, tmp.row)
 					&& matrix[tmp.column][tmp.row].valuebigcell
-					&& (matrix[tmp.column][tmp.row].added)) {
+					&& !(matrix[tmp.column][tmp.row].addedRNS)) {
 				select.add(matrix[tmp.column][tmp.row]);
 			}
 		}
@@ -227,7 +227,7 @@ public class Algorithm extends Thread {
 																// có thuộc khối
 																// lớn có thể đi
 																// được k?
-					if (matrix[tmp.column][tmp.row].added) { // kiểm
+					if (!matrix[tmp.column][tmp.row].addedRNS) { // kiểm
 																// tra
 																// subcell
 						// đã thuộc hàng

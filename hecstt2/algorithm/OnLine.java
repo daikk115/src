@@ -29,7 +29,7 @@ public class OnLine extends Algorithm {
 		checkBlock2(currentCell);
 		for (int i = 0; i < neighbors.size(); i++) {
 			if (!(matrix[neighbors.get(i).column][neighbors.get(i).row].valuebigcell)
-					|| matrix[neighbors.get(i).column][neighbors.get(i).row].added)
+					|| (matrix[neighbors.get(i).column][neighbors.get(i).row].added))
 				continue;
 			constructST(currentCell, neighbors.get(i));
 			this.frame.repaint();
@@ -279,13 +279,13 @@ public class OnLine extends Algorithm {
 
 		if (!neighbors.isEmpty()) {
 			if (checkNotOver(end.column, end.row)
-					&& !matrix[end.column][end.row].added
+					&& !(matrix[end.column][end.row].added)
 					&& matrix[end.column][end.row].valuebigcell) {
-				this.listSTC.add(new Edge(start, end));
 				matrix[end.column][end.row].added = true;
 				matrix[end.column - 1][end.row].added = true;
 				matrix[end.column][end.row - 1].added = true;
 				matrix[end.column - 1][end.row - 1].added = true;
+				this.listSTC.add(new Edge(start, end));
 
 				if (neighbors.get(0) != null) {
 					if (end.column == neighbors.get(0).column
