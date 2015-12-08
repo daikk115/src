@@ -27,19 +27,47 @@ public class OnLine extends Algorithm {
 	public void onlineSTC(SubCell parentCell, SubCell currentCell) {
 		ArrayList<SubCell> neighbors = neighbors(parentCell, currentCell);
 		checkBlock2(currentCell);
+		System.out.println("* Current Cell : " + currentCell.column + "x"
+				+ currentCell.row);
+
 		for (int i = 0; i < neighbors.size(); i++) {
 			if (!(matrix[neighbors.get(i).column][neighbors.get(i).row].valuebigcell)
 					|| (matrix[neighbors.get(i).column][neighbors.get(i).row].added))
 				continue;
 			constructST(currentCell, neighbors.get(i));
-			System.out.println("Move forward");
-			move(currentCell, neighbors.get(i));
+			if (!isInBigCell(robotCell, currentCell)) {
+				// if (matrix[currentCell.column][currentCell.row].left
+				// || matrix[currentCell.column][currentCell.row].top) {
+				// move(robotCell, currentCell);
+				// } else if (matrix[currentCell.column][currentCell.row].right
+				// || matrix[currentCell.column][currentCell.row].down) {
+				// move(currentCell, robotCell);
+				// }
+				move(robotCell, currentCell);
+			} else {
+				System.out.println("Move foward");
+				move(currentCell, neighbors.get(i));
+			}
 			onlineSTC(currentCell, neighbors.get(i));
 		}
 
-		if (!isStart(currentCell)) {
-			System.out.println("Move back");
-			move(currentCell, parentCell);
+		System.out.println("* Current Cell : " + currentCell.column + "x"
+				+ currentCell.row);
+
+		if (!isStart(robotCell)) {
+			if (!isInBigCell(robotCell, currentCell)) {
+				// if (matrix[currentCell.column][currentCell.row].left
+				// || matrix[currentCell.column][currentCell.row].top) {
+				// move(robotCell, currentCell);
+				// } else if (matrix[currentCell.column][currentCell.row].right
+				// || matrix[currentCell.column][currentCell.row].down) {
+				// move(currentCell, robotCell);
+				// }
+				move(currentCell, robotCell);
+			} else {
+				System.out.println("Move back");
+				move(currentCell, parentCell);
+			}
 		} else {
 			System.out.println("Finish");
 		}
@@ -95,6 +123,7 @@ public class OnLine extends Algorithm {
 	public void move(SubCell currentCell, SubCell nextCell) {
 		SubCell startCell = new SubCell(0, 0);
 		SubCell endCell = new SubCell(0, 0);
+
 		startCell.column = robotCell.column;
 		startCell.row = robotCell.row;
 
@@ -105,7 +134,7 @@ public class OnLine extends Algorithm {
 			}
 			if (endCell.column == startCell.column) {
 				if (endCell.row > startCell.row) {
-					for (int i = robot.y; i <= endCell.row * mapconfig.cell; i += 2) {
+					for (int i = robot.y; i <= endCell.row * mapconfig.cell; i += 3) {
 						try {
 							robot.y = i;
 							Thread.sleep(30);
@@ -117,7 +146,7 @@ public class OnLine extends Algorithm {
 						}
 					}
 				} else {
-					for (int i = robot.y; i >= endCell.row * mapconfig.cell; i -= 2) {
+					for (int i = robot.y; i >= endCell.row * mapconfig.cell; i -= 3) {
 						try {
 							robot.y = i;
 							Thread.sleep(30);
@@ -131,7 +160,7 @@ public class OnLine extends Algorithm {
 				}
 			} else {
 				if (endCell.column > startCell.column) {
-					for (int i = robot.x; i <= endCell.column * mapconfig.cell; i += 2) {
+					for (int i = robot.x; i <= endCell.column * mapconfig.cell; i += 3) {
 						try {
 							robot.x = i;
 							Thread.sleep(30);
@@ -143,7 +172,7 @@ public class OnLine extends Algorithm {
 						}
 					}
 				} else {
-					for (int i = robot.x; i >= endCell.column * mapconfig.cell; i -= 2) {
+					for (int i = robot.x; i >= endCell.column * mapconfig.cell; i -= 3) {
 						try {
 							robot.x = i;
 							Thread.sleep(30);
@@ -246,10 +275,8 @@ public class OnLine extends Algorithm {
 	 * Kiem tra da den Big Cell Start chua?
 	 */
 	public boolean isStart(SubCell currentCell) {
-		return (currentCell.column == 1 && currentCell.row == 1)
-				|| (currentCell.column == 0 && currentCell.row == 0)
-				|| (currentCell.column == 0 && currentCell.row == 1)
-				|| (currentCell.column == 1 && currentCell.row == 0);
+		return ((currentCell.column == 0 && currentCell.row == 0)
+				|| (currentCell.column == 0 && currentCell.row == 1) || (currentCell.column == 1 && currentCell.row == 0));
 	}
 
 	/*
