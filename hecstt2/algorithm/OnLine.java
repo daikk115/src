@@ -36,13 +36,6 @@ public class OnLine extends Algorithm {
 				continue;
 			constructST(currentCell, neighbors.get(i));
 			if (!isInBigCell(robotCell, currentCell)) {
-				// if (matrix[currentCell.column][currentCell.row].left
-				// || matrix[currentCell.column][currentCell.row].top) {
-				// move(robotCell, currentCell);
-				// } else if (matrix[currentCell.column][currentCell.row].right
-				// || matrix[currentCell.column][currentCell.row].down) {
-				// move(currentCell, robotCell);
-				// }
 				move(robotCell, currentCell);
 			} else {
 				System.out.println("Move foward");
@@ -54,15 +47,8 @@ public class OnLine extends Algorithm {
 		System.out.println("* Current Cell : " + currentCell.column + "x"
 				+ currentCell.row);
 
-		if (!isStart(robotCell)) {
+		if (!isStart(currentCell)) {
 			if (!isInBigCell(robotCell, currentCell)) {
-				// if (matrix[currentCell.column][currentCell.row].left
-				// || matrix[currentCell.column][currentCell.row].top) {
-				// move(robotCell, currentCell);
-				// } else if (matrix[currentCell.column][currentCell.row].right
-				// || matrix[currentCell.column][currentCell.row].down) {
-				// move(currentCell, robotCell);
-				// }
 				move(currentCell, robotCell);
 			} else {
 				System.out.println("Move back");
