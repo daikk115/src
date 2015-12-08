@@ -32,7 +32,6 @@ public class OnLine extends Algorithm {
 					|| (matrix[neighbors.get(i).column][neighbors.get(i).row].added))
 				continue;
 			constructST(currentCell, neighbors.get(i));
-			// this.frame.repaint();
 			System.out.println("Move forward");
 			move(currentCell, neighbors.get(i));
 			onlineSTC(currentCell, neighbors.get(i));
@@ -41,6 +40,8 @@ public class OnLine extends Algorithm {
 		if (!isStart(currentCell)) {
 			System.out.println("Move back");
 			move(currentCell, parentCell);
+		} else {
+			System.out.println("Finish");
 		}
 	}
 
@@ -107,7 +108,7 @@ public class OnLine extends Algorithm {
 					for (int i = robot.y; i <= endCell.row * mapconfig.cell; i += 2) {
 						try {
 							robot.y = i;
-							Thread.sleep(20);
+							Thread.sleep(30);
 							this.frame.repaint(robot.x, robot.y,
 									mapconfig.cell, mapconfig.cell);
 						} catch (InterruptedException ex) {
@@ -119,7 +120,7 @@ public class OnLine extends Algorithm {
 					for (int i = robot.y; i >= endCell.row * mapconfig.cell; i -= 2) {
 						try {
 							robot.y = i;
-							Thread.sleep(20);
+							Thread.sleep(30);
 							frame.repaint(robot.x, robot.y, mapconfig.cell,
 									mapconfig.cell);
 						} catch (InterruptedException ex) {
@@ -133,7 +134,7 @@ public class OnLine extends Algorithm {
 					for (int i = robot.x; i <= endCell.column * mapconfig.cell; i += 2) {
 						try {
 							robot.x = i;
-							Thread.sleep(10);
+							Thread.sleep(30);
 							frame.repaint(robot.x, robot.y, mapconfig.cell,
 									mapconfig.cell);
 						} catch (InterruptedException ex) {
@@ -145,7 +146,7 @@ public class OnLine extends Algorithm {
 					for (int i = robot.x; i >= endCell.column * mapconfig.cell; i -= 2) {
 						try {
 							robot.x = i;
-							Thread.sleep(10);
+							Thread.sleep(30);
 							frame.repaint(robot.x, robot.y, mapconfig.cell,
 									mapconfig.cell);
 						} catch (InterruptedException ex) {
@@ -154,13 +155,6 @@ public class OnLine extends Algorithm {
 						}
 					}
 				}
-				try {
-					Thread.sleep(100);
-				} catch (InterruptedException ex) {
-					Logger.getLogger(OffLine.class.getName()).log(Level.SEVERE,
-							null, ex);
-				}
-				frame.repaint(robot.x, robot.y, mapconfig.cell, mapconfig.cell);
 			}
 			System.out.println("->Move from " + startCell.column + "x"
 					+ startCell.row + " to " + endCell.column + "x"
@@ -252,9 +246,10 @@ public class OnLine extends Algorithm {
 	 * Kiem tra da den Big Cell Start chua?
 	 */
 	public boolean isStart(SubCell currentCell) {
-		return ((currentCell.column == 1 && currentCell.row == 1)
+		return (currentCell.column == 1 && currentCell.row == 1)
 				|| (currentCell.column == 0 && currentCell.row == 0)
-				|| (currentCell.column == 0 && currentCell.row == 1) || (currentCell.column == 1 && currentCell.row == 0));
+				|| (currentCell.column == 0 && currentCell.row == 1)
+				|| (currentCell.column == 1 && currentCell.row == 0);
 	}
 
 	/*
