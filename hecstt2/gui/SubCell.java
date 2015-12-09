@@ -15,6 +15,7 @@ public class SubCell {
     public boolean value; // là tường = false;
     public boolean valuebigcell; // là khối 4Cell vật cản = false;
     public boolean added; // đã thêm vào hàng listSTC chưa? nếu chưa thì là true;
+    public boolean addedRNS;
     
     public SubCell(int x, int y){
         this.top = true;
@@ -26,6 +27,7 @@ public class SubCell {
         this.column = x;
         this.row = y;
         this.added = false;
+        this.addedRNS = false;
     }
     
 }
