@@ -20,6 +20,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
+import java.awt.Image;
 import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;
@@ -71,6 +72,8 @@ public class MyGraphics extends JFrame {
 	private Rectangle screen;
 
 	public MyRobot robot = new MyRobot(0, 0); // khởi tạo tọa độ robot, tạo độ
+
+	public ArrayList<MyObstacle> listObstacles = new ArrayList<>();
 
 	private BufferedImage img;
 
@@ -142,31 +145,38 @@ public class MyGraphics extends JFrame {
 
 		// khởi tạo phần lưu trữ dữ liệu bản đồ
 		matrix = new SubCell[mapconfig.numbercolumns][mapconfig.numberrows]; // các
-																				// sự
-																				// kiện
-																				// khi
-																				// thao
-																				// tác
-																				// trên
-																				// giao
-																				// diện
-																				// hoặc
-																				// load
-																				// file
-																				// sẽ
-																				// tác
-																				// động
-																				// đến
-																				// dữ
-																				// liệu
-																				// ma
-																				// trận
-																				// này
+		// sự
+		// kiện
+		// khi
+		// thao
+		// tác
+		// trên
+		// giao
+		// diện
+		// hoặc
+		// load
+		// file
+		// sẽ
+		// tác
+		// động
+		// đến
+		// dữ
+		// liệu
+		// ma
+		// trận
+		// này
 		for (int i = 0; i < mapconfig.numbercolumns; i++) {
 			for (int j = 0; j < mapconfig.numberrows; j++) {
 				matrix[i][j] = new SubCell(i, j);
 			}
 		}
+
+		// add obstacles
+		// listObstacles.add(new MyObstacle(0, 100, 1, this));
+		// listObstacles.add(new MyObstacle(0, 350, 1, this));
+		// listObstacles.add(new MyObstacle(350, 100, 2, this));
+		// listObstacles.add(new MyObstacle(250, 100, 2, this));
+
 		// map.setBorder(BorderFactory.createLineBorder(Color.green, 2, true));
 		map.setPreferredSize(new Dimension(screen.width - 300, screen.height));
 		add(map, BorderLayout.EAST);
@@ -259,12 +269,12 @@ public class MyGraphics extends JFrame {
 			}
 		});
 
-		JButton clear = new JButton("xóa sạch");
-		clear.setBounds(160, 75, 120, 35);
-		clear.addActionListener(new ActionListener() {
-
+		JButton obsBtn = new JButton("Thêm vật cản");
+		obsBtn.setBounds(160, 75, 120, 35);
+		obsBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 			}
 		});
 
@@ -295,7 +305,7 @@ public class MyGraphics extends JFrame {
 		middle_left.setBounds(0, 250, 300, 200);
 		middle_left.add(searchstc);
 		middle_left.add(onlineBtn);
-		middle_left.add(clear);
+		middle_left.add(obsBtn);
 		middle_left.add(run);
 
 		JPanel bottom_left = new JPanel();
@@ -388,26 +398,36 @@ public class MyGraphics extends JFrame {
 				}
 			}
 		}
-		g2d.setColor(Color.RED);
+		g2d.setColor(Color.DARK_GRAY);
 		g2d.setStroke(new BasicStroke(1));
 
 		// vẽ các đường ngang dọc của bản đồ
 		for (int i = 1; i <= mapconfig.numbercolumns; i++) { // tại sao không
-																// +=mapconfig.cell,
-																// lý do là để
-																// vẽ đủ số
-																// lượng lề thay
-																// vì i<
-																// mapconfig.width
-																// đối khi thiếu
-																// dòng cuối
+			// +=mapconfig.cell,
+			// lý do là để
+			// vẽ đủ số
+			// lượng lề thay
+			// vì i<
+			// mapconfig.width
+			// đối khi thiếu
+			// dòng cuối
+			if (i % 2 == 0) {
+				g2d.setStroke(new BasicStroke(3));
+			} else {
+				g2d.setStroke(new BasicStroke(1));
+			}
 			g2d.drawLine(i * mapconfig.cell, 0, i * mapconfig.cell,
 					mapconfig.height);
 		}
 		for (int i = 0; i <= mapconfig.numberrows; i++) {
+			if (i % 2 == 0) {
+				g2d.setStroke(new BasicStroke(3));
+			} else {
+				g2d.setStroke(new BasicStroke(1));
+			}
 			g2d.drawLine(0, i * mapconfig.cell, mapconfig.width, i
 					* mapconfig.cell); // 0 là x, i là y, tọa độ đề các x sang
-										// phải, y đi xuống
+			// phải, y đi xuống
 		}
 
 		// vẽ con robot
@@ -416,7 +436,11 @@ public class MyGraphics extends JFrame {
 				mapconfig.cell - 2, null);
 		// File outputfile = new File("saveimg2.png");
 		// ImageIO.write(img, "png", outputfile);
-
+		Image tk = Toolkit.getDefaultToolkit().getImage(MyObstacle.fileImage);
+		for (MyObstacle obstacle : listObstacles) {
+			g2d.drawImage(tk, obstacle.x + 2, obstacle.y + 2,
+					mapconfig.cell - 4, mapconfig.cell - 4, null);
+		}
 		if (keySTC) {
 			drawSTC(g2d);
 		}
