@@ -398,7 +398,7 @@ public class MyGraphics extends JFrame {
 				}
 			}
 		}
-		g2d.setColor(Color.RED);
+		g2d.setColor(Color.DARK_GRAY);
 		g2d.setStroke(new BasicStroke(1));
 
 		// vẽ các đường ngang dọc của bản đồ
@@ -411,10 +411,20 @@ public class MyGraphics extends JFrame {
 			// mapconfig.width
 			// đối khi thiếu
 			// dòng cuối
+			if (i % 2 == 0) {
+				g2d.setStroke(new BasicStroke(3));
+			} else {
+				g2d.setStroke(new BasicStroke(1));
+			}
 			g2d.drawLine(i * mapconfig.cell, 0, i * mapconfig.cell,
 					mapconfig.height);
 		}
 		for (int i = 0; i <= mapconfig.numberrows; i++) {
+			if (i % 2 == 0) {
+				g2d.setStroke(new BasicStroke(3));
+			} else {
+				g2d.setStroke(new BasicStroke(1));
+			}
 			g2d.drawLine(0, i * mapconfig.cell, mapconfig.width, i
 					* mapconfig.cell); // 0 là x, i là y, tọa độ đề các x sang
 			// phải, y đi xuống
