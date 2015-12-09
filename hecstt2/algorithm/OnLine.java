@@ -35,13 +35,10 @@ public class OnLine extends Algorithm {
 					|| (matrix[neighbors.get(i).column][neighbors.get(i).row].added))
 				continue;
 			constructST(currentCell, neighbors.get(i));
-			System.out.println("Move foward");
+			System.out.println("Move foward "+i);
 			move(currentCell, neighbors.get(i));
 			onlineSTC(currentCell, neighbors.get(i));
 		}
-
-		System.out.println("*Current Cell : " + currentCell.column + "x"
-				+ currentCell.row);
 		
 		if (!isStart(currentCell)) {
 			System.out.println("Move back");
@@ -177,10 +174,11 @@ public class OnLine extends Algorithm {
 	 * Kiem tra xem checkCell co nam trong BigCell dai dien boi bigCell
 	 */
 	public boolean isInBigCell(SubCell checkCell, SubCell bigCell) {
-		return (((checkCell.column == bigCell.column) && (checkCell.row == bigCell.row))
-				|| ((checkCell.column == bigCell.column) && (checkCell.row == bigCell.row - 1))
-				|| ((checkCell.column == bigCell.column - 1) && (checkCell.row == bigCell.row)) || ((checkCell.column == bigCell.column - 1) && (checkCell.row - 1 == bigCell.row - 1)));
-	}
+//		return (((checkCell.column == bigCell.column) && (checkCell.row == bigCell.row))
+//				|| ((checkCell.column == bigCell.column) && (checkCell.row == bigCell.row - 1))
+//				|| ((checkCell.column == bigCell.column - 1) && (checkCell.row == bigCell.row)) || ((checkCell.column == bigCell.column - 1) && (checkCell.row - 1 == bigCell.row - 1)));
+            return (checkCell.column/2 == bigCell.column/2) && (checkCell.row/2 == bigCell.row/2);
+        }
 
 	/*
 	 * Trả về danh sách hàng xóm của một Cell dựa trên vị trí Cell cha.
