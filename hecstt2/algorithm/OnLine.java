@@ -27,7 +27,7 @@ public class OnLine extends Algorithm {
 	public void onlineSTC(SubCell parentCell, SubCell currentCell) {
 		ArrayList<SubCell> neighbors = neighbors(parentCell, currentCell);
 		checkBlock2(currentCell);
-		System.out.println("* Current Cell : " + currentCell.column + "x"
+		System.out.println("*Current Cell : " + currentCell.column + "x"
 				+ currentCell.row);
 
 		for (int i = 0; i < neighbors.size(); i++) {
@@ -35,25 +35,17 @@ public class OnLine extends Algorithm {
 					|| (matrix[neighbors.get(i).column][neighbors.get(i).row].added))
 				continue;
 			constructST(currentCell, neighbors.get(i));
-			if (!isInBigCell(robotCell, currentCell)) {
-				move(robotCell, currentCell);
-			} else {
-				System.out.println("Move foward");
-				move(currentCell, neighbors.get(i));
-			}
+			System.out.println("Move foward");
+			move(currentCell, neighbors.get(i));
 			onlineSTC(currentCell, neighbors.get(i));
 		}
 
-		System.out.println("* Current Cell : " + currentCell.column + "x"
+		System.out.println("*Current Cell : " + currentCell.column + "x"
 				+ currentCell.row);
-
+		
 		if (!isStart(currentCell)) {
-			if (!isInBigCell(robotCell, currentCell)) {
-				move(currentCell, robotCell);
-			} else {
-				System.out.println("Move back");
-				move(currentCell, parentCell);
-			}
+			System.out.println("Move back");
+			move(currentCell, parentCell);
 		} else {
 			System.out.println("Finish");
 		}
@@ -178,7 +170,7 @@ public class OnLine extends Algorithm {
 			startCell.row = endCell.row;
 			robotCell.column = endCell.column;
 			robotCell.row = endCell.row;
-		} while (isInBigCell(endCell, nextCell));
+		} while (!isInBigCell(endCell, nextCell));
 	}
 
 	/*
