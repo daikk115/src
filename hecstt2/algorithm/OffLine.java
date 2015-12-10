@@ -49,10 +49,10 @@ public class OffLine extends Algorithm {
             }
             if (nextcell.column == current.column) {
                 if (nextcell.row > current.row) {
-                    for (int i = robot.y; i <= nextcell.row * mapconfig.cell; i += 2) {
-                        checkObstacle();
+                    for (int j = robot.y; j <= nextcell.row * mapconfig.cell; j += 2) {
+                        checkObstacle(robot.x, j);
                         try {
-                            robot.y = i;
+                            robot.y = j;
                             Thread.sleep(20);
                             frame.repaint(robot.x, robot.y, mapconfig.cell,
                                     mapconfig.cell);
@@ -62,10 +62,10 @@ public class OffLine extends Algorithm {
                         }
                     }
                 } else {
-                    for (int i = robot.y; i >= nextcell.row * mapconfig.cell; i -= 2) {
-                        checkObstacle();
+                    for (int j = robot.y; j >= nextcell.row * mapconfig.cell; j -= 2) {
+                        checkObstacle(robot.x, j);
                         try {
-                            robot.y = i;
+                            robot.y = j;
                             Thread.sleep(20);
                             frame.repaint(robot.x, robot.y, mapconfig.cell,
                                     mapconfig.cell);
@@ -79,7 +79,7 @@ public class OffLine extends Algorithm {
             } else {
                 if (nextcell.column > current.column) {
                     for (int i = robot.x; i <= nextcell.column * mapconfig.cell; i += 2) {
-                        checkObstacle();
+                        checkObstacle(i, robot.y);
                         try {
                             robot.x = i;
                             Thread.sleep(20);
@@ -92,7 +92,7 @@ public class OffLine extends Algorithm {
                     }
                 } else {
                     for (int i = robot.x; i >= nextcell.column * mapconfig.cell; i -= 2) {
-                        checkObstacle();
+                        checkObstacle(i, robot.y);
                         try {
                             robot.x = i;
                             Thread.sleep(20);
@@ -108,8 +108,7 @@ public class OffLine extends Algorithm {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ex) {
-                Logger.getLogger(OffLine.class.getName()).log(Level.SEVERE,
-                        null, ex);
+                Logger.getLogger(OffLine.class.getName()).log(Level.SEVERE, null, ex);
             }
             frame.repaint(robot.x, robot.y, mapconfig.cell, mapconfig.cell);
             current.column = nextcell.column;
@@ -117,15 +116,24 @@ public class OffLine extends Algorithm {
         } while (!(start.column == current.column && start.row == current.row));
     }
 
-    public void checkObstacle() {
-        for (MyObstacle obstacle : this.listObstacles) {
-            boolean tmp = obstacle.getFlag();
-            System.out.println(tmp);
-            while (tmp) {
-                tmp = obstacle.getFlag();
-                System.out.println(robot.x+" "+robot.y);
-                System.out.println(obstacle.x+" "+obstacle.y);
+    public void checkObstacle(int xRobot, int yRobot) {
+
+        boolean tmp;
+        do {
+            tmp = false;
+            synchronized (this.listObstacles) {
+                for (MyObstacle obstacle : this.listObstacles) {
+                    tmp = obstacle.getFlag(xRobot, yRobot, obstacle.x, obstacle.y);
+                    if(tmp) break;
+                }
             }
-        }
+            if(tmp){
+                try {
+                    OffLine.sleep(30);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(OffLine.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } while (tmp);
     }
 }

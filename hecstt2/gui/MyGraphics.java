@@ -172,10 +172,14 @@ public class MyGraphics extends JFrame {
 		}
 
 		// add obstacles
-		// listObstacles.add(new MyObstacle(0, 100, 1, this));
-		// listObstacles.add(new MyObstacle(0, 350, 1, this));
-		// listObstacles.add(new MyObstacle(350, 100, 2, this));
-		// listObstacles.add(new MyObstacle(250, 100, 2, this));
+		 listObstacles.add(new MyObstacle(0, 100, 10, this));
+		 listObstacles.add(new MyObstacle(0, 350, 10, this));
+                 listObstacles.add(new MyObstacle(0, 350, 10, this));
+                 listObstacles.add(new MyObstacle(0, 350, 10, this));
+                 listObstacles.add(new MyObstacle(0, 350, 10, this));
+                 listObstacles.add(new MyObstacle(0, 350, 10, this));
+		 listObstacles.add(new MyObstacle(350, 100, 10, this));
+		 listObstacles.add(new MyObstacle(250, 100, 10, this));
 
 		// map.setBorder(BorderFactory.createLineBorder(Color.green, 2, true));
 		map.setPreferredSize(new Dimension(screen.width - 300, screen.height));
