@@ -12,6 +12,8 @@ package hecstt2.gui;
 public class MyRobot {
     public int x, y, speed;
     public String fileImage;
+    public int battery = 30; // số bước còn lại mà pin có thể đi.
+    public int numberstep = 0;  // số bước đã đi tính từ chỗ xạc pin
     
     public MyRobot(){
         this.x = 0;

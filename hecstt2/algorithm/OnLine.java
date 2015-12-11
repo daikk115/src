@@ -26,6 +26,7 @@ public class OnLine extends Algorithm {
      * Online STC
      */
     public void onlineSTC(SubCell parentCell, SubCell currentCell) {
+
         ArrayList<SubCell> neighbors = neighbors(parentCell, currentCell);
         checkBlock2(currentCell);
         System.out.println("*Current Cell : " + currentCell.column + "x"
@@ -36,10 +37,12 @@ public class OnLine extends Algorithm {
                     || (matrix[neighbors.get(i).column][neighbors.get(i).row].added)) {
                 continue;
             }
-            constructST(currentCell, neighbors.get(i));
-            System.out.println("Move foward " + i);
-            move(currentCell, neighbors.get(i));
-            onlineSTC(currentCell, neighbors.get(i));
+            if (!getStateBattery()) {
+                constructST(currentCell, neighbors.get(i));
+                System.out.println("Move foward " + i);
+                move(currentCell, neighbors.get(i));
+                onlineSTC(currentCell, neighbors.get(i));
+            }
         }
 
         if (!isStart(currentCell)) {
@@ -109,6 +112,8 @@ public class OnLine extends Algorithm {
             if (endCell == null) {
                 break;
             }
+            robot.numberstep++;
+            robot.battery--;
             if (endCell.column == startCell.column) {
                 if (endCell.row > startCell.row) {
                     for (int j = robot.y; j <= endCell.row * mapconfig.cell; j += 3) {

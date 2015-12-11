@@ -293,4 +293,8 @@ public class Algorithm extends Thread {
             }
         } while (tmp);
     }
+    
+    public boolean getStateBattery(){
+        return robot.numberstep >= robot.battery;
+    }
 }
