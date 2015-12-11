@@ -18,4 +18,9 @@ T thấy hoạt động của nó là các hàm draw thực thi các công việ
 
 Tương tự khi click chuột để tạo các block, mình sẽ cập nhật nó vào value của 1 SubCell cụ thể và gọi repaint() mỗi cho đó là xong. Tất nhiên, trong hàm repaint() đã có hàm vẽ tất cả block dựa vào matrix các SubCell.
 
-Lâu lâu vấn các 3 vật gặp nhau, là bị lỗi đứng lại cả 3. 
+11/12/2015: Lâu lâu vấn các 3 vật gặp nhau, là bị lỗi đứng lại cả 3. 
+12/12/2015 00:41 : Cập nhật thời lượng pin cho robot trong thuật toán Online, với pin giảm dần theo từng bước đi còn số bước đi tăng dần, dựa vào đó để cho robot quay về theo con đường cũ.
+
+p/s:
+- ý tưởng nếu làm cho Offline, thì dùng thuật toán BFS có thể tìm đường về tốt nhất, sau đó tùy vào lượng pin mà quay về, chứ k phụ thuộc vào 50% lượng pin như các nhóm đã làm. 
+- Chắc phải xử lý phần giao diện cho Ok tí đã, sau đó làm lại bài tập cá nhân ok, còn kịp thì làm cái OFFLINE BATTERY
