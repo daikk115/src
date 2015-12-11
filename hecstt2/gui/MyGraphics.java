@@ -172,14 +172,10 @@ public class MyGraphics extends JFrame {
 		}
 
 		// add obstacles
-		 listObstacles.add(new MyObstacle(0, 100, 10, this));
-		 listObstacles.add(new MyObstacle(0, 350, 10, this));
-                 listObstacles.add(new MyObstacle(0, 350, 10, this));
-                 listObstacles.add(new MyObstacle(0, 350, 10, this));
-                 listObstacles.add(new MyObstacle(0, 350, 10, this));
-                 listObstacles.add(new MyObstacle(0, 350, 10, this));
-		 listObstacles.add(new MyObstacle(350, 100, 10, this));
-		 listObstacles.add(new MyObstacle(250, 100, 10, this));
+		 listObstacles.add(new MyObstacle(0, 100, 10, this, 1));
+		 listObstacles.add(new MyObstacle(0, 350, 10, this, 2));
+		 listObstacles.add(new MyObstacle(350, 100, 10, this, 3));
+		 listObstacles.add(new MyObstacle(250, 100, 10, this, 4));
 
 		// map.setBorder(BorderFactory.createLineBorder(Color.green, 2, true));
 		map.setPreferredSize(new Dimension(screen.width - 300, screen.height));
@@ -446,7 +442,7 @@ public class MyGraphics extends JFrame {
 					mapconfig.cell - 4, mapconfig.cell - 4, null);
 		}
 		if (keySTC) {
-			drawSTC(g2d);
+//			drawSTC(g2d);
 		}
 
 		Graphics2D g2 = (Graphics2D) g;
