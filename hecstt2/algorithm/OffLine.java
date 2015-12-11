@@ -115,25 +115,4 @@ public class OffLine extends Algorithm {
             current.row = nextcell.row;
         } while (!(start.column == current.column && start.row == current.row));
     }
-
-    public void checkObstacle(int xRobot, int yRobot) {
-
-        boolean tmp;
-        do {
-            tmp = false;
-            synchronized (this.listObstacles) {
-                for (MyObstacle obstacle : this.listObstacles) {
-                    tmp = obstacle.getFlag(xRobot, yRobot, obstacle.x, obstacle.y);
-                    if(tmp) break;
-                }
-            }
-            if(tmp){
-                try {
-                    OffLine.sleep(30);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(OffLine.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        } while (tmp);
-    }
 }

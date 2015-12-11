@@ -12,6 +12,8 @@ import hecstt2.gui.MyObstacle;
 import hecstt2.gui.MyRobot;
 import hecstt2.gui.SubCell;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 /**
@@ -267,5 +269,28 @@ public class Algorithm extends Thread {
         b = matrix[b.column][b.row];
         return (!a.top && !b.top) || (!a.down && !b.down)
                 || (!a.left && !b.left) || (!a.right && !b.right);
+    }
+
+    public void checkObstacle(int xRobot, int yRobot) {
+
+        boolean tmp;
+        do {
+            tmp = false;
+            synchronized (this.listObstacles) {
+                for (MyObstacle obstacle : this.listObstacles) {
+                    tmp = obstacle.getFlag(xRobot, yRobot, obstacle.x, obstacle.y);
+                    if (tmp) {
+                        break;
+                    }
+                }
+            }
+            if (tmp) {
+                try {
+                    OffLine.sleep(30);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(OffLine.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } while (tmp);
     }
 }
