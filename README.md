@@ -18,4 +18,4 @@ T thấy hoạt động của nó là các hàm draw thực thi các công việ
 
 Tương tự khi click chuột để tạo các block, mình sẽ cập nhật nó vào value của 1 SubCell cụ thể và gọi repaint() mỗi cho đó là xong. Tất nhiên, trong hàm repaint() đã có hàm vẽ tất cả block dựa vào matrix các SubCell.
 
-Nguyen Thi Ba CUong
+Lâu lâu vấn các 3 vật gặp nhau, là bị lỗi đứng lại cả 3. 
