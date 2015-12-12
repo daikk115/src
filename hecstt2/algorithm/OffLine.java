@@ -6,7 +6,6 @@
 package hecstt2.algorithm;
 
 import hecstt2.gui.MyGraphics;
-import hecstt2.gui.MyObstacle;
 import hecstt2.gui.SubCell;
 
 import java.util.logging.Level;
