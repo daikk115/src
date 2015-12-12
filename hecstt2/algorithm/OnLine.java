@@ -19,6 +19,7 @@ public class OnLine extends Algorithm {
 
     @Override
     public void run() {
+        robot.listStep.add(new SubCell(robot.x / mapconfig.cell, robot.x / mapconfig.cell));
         onlineSTC(null, new SubCell(1, 1));
     }
 
@@ -26,7 +27,7 @@ public class OnLine extends Algorithm {
      * Online STC
      */
     public void onlineSTC(SubCell parentCell, SubCell currentCell) {
-
+        
         ArrayList<SubCell> neighbors = neighbors(parentCell, currentCell);
         checkBlock2(currentCell);
         System.out.println("*Current Cell : " + currentCell.column + "x"
@@ -41,12 +42,16 @@ public class OnLine extends Algorithm {
                 constructST(currentCell, neighbors.get(i));
                 System.out.println("Move foward " + i);
                 move(currentCell, neighbors.get(i));
+                System.out.println("here");
                 onlineSTC(currentCell, neighbors.get(i));
             }
         }
 
         if (!isStart(currentCell)) {
             System.out.println("Move back");
+            if(parentCell == null){
+                System.out.println("XXX");
+            }
             move(currentCell, parentCell);
         } else {
             System.out.println("Finish");
@@ -112,6 +117,7 @@ public class OnLine extends Algorithm {
             if (endCell == null) {
                 break;
             }
+            robot.listStep.add(endCell);
             robot.numberstep++;
             robot.battery--;
             if (endCell.column == startCell.column) {

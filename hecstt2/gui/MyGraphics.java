@@ -143,7 +143,7 @@ public class MyGraphics extends JFrame {
         GraphicsConfiguration gc = getGraphicsConfiguration();
         img = gc.createCompatibleImage(mapconfig.width + 1,
                 mapconfig.height + 1, Transparency.TRANSLUCENT);
-        
+
         this.g2d = (Graphics2D) img.createGraphics();
         // khởi tạo phần lưu trữ dữ liệu bản đồ
         matrix = new SubCell[mapconfig.numbercolumns][mapconfig.numberrows]; // các
@@ -220,7 +220,7 @@ public class MyGraphics extends JFrame {
             public void mouseExited(MouseEvent e) {
             }
         });
-        
+
         offline = new OffLine(this);
         online = new OnLine(this);
 
@@ -271,12 +271,12 @@ public class MyGraphics extends JFrame {
             }
         });
 
-        JButton obsBtn = new JButton("Thêm vật cản");
+        JButton obsBtn = new JButton("show STC");
         obsBtn.setBounds(160, 75, 120, 35);
         obsBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                keySTC = !keySTC;
             }
         });
 
@@ -393,8 +393,12 @@ public class MyGraphics extends JFrame {
                     g2d.setColor(Color.GRAY);
                     g2d.fillRect(i * mapconfig.cell, j * mapconfig.cell,
                             mapconfig.cell, mapconfig.cell);
+                }else if (robot.checkInListStep(i, j)) {
+                    g2d.setColor(Color.getHSBColor(0.43f, 0.46f, 0.98f));
+                    g2d.fillRect(i * mapconfig.cell, j * mapconfig.cell,
+                            mapconfig.cell, mapconfig.cell);
                 } else {
-                    g2d.setColor(getBackground());
+                    g2d.setColor(Color.getHSBColor(0.424f, 0.611f, 0.706f));
                     g2d.fillRect(i * mapconfig.cell, j * mapconfig.cell,
                             mapconfig.cell, mapconfig.cell);
                 }
