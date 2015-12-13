@@ -121,63 +121,7 @@ public class OnLine extends Algorithm {
 			robot.listStep.add(endCell);
 			robot.numberstep++;
 			robot.battery--;
-			if (endCell.column == startCell.column) {
-				if (endCell.row > startCell.row) {
-					for (int j = robot.y; j <= endCell.row * mapconfig.cell; j += 3) {
-						checkObstacle(robot.x, j);
-						try {
-							robot.y = j;
-							Thread.sleep(30);
-							this.frame.repaint(robot.x, robot.y,
-									mapconfig.cell, mapconfig.cell);
-						} catch (InterruptedException ex) {
-							Logger.getLogger(MyGraphics.class.getName()).log(
-									Level.SEVERE, null, ex);
-						}
-					}
-				} else {
-					for (int j = robot.y; j >= endCell.row * mapconfig.cell; j -= 3) {
-						checkObstacle(robot.x, j);
-						try {
-							robot.y = j;
-							Thread.sleep(30);
-							frame.repaint(robot.x, robot.y, mapconfig.cell,
-									mapconfig.cell);
-						} catch (InterruptedException ex) {
-							Logger.getLogger(MyGraphics.class.getName()).log(
-									Level.SEVERE, null, ex);
-						}
-					}
-				}
-			} else {
-				if (endCell.column > startCell.column) {
-					for (int i = robot.x; i <= endCell.column * mapconfig.cell; i += 3) {
-						checkObstacle(i, robot.y);
-						try {
-							robot.x = i;
-							Thread.sleep(30);
-							frame.repaint(robot.x, robot.y, mapconfig.cell,
-									mapconfig.cell);
-						} catch (InterruptedException ex) {
-							Logger.getLogger(MyGraphics.class.getName()).log(
-									Level.SEVERE, null, ex);
-						}
-					}
-				} else {
-					for (int i = robot.x; i >= endCell.column * mapconfig.cell; i -= 3) {
-						checkObstacle(i, robot.y);
-						try {
-							robot.x = i;
-							Thread.sleep(30);
-							frame.repaint(robot.x, robot.y, mapconfig.cell,
-									mapconfig.cell);
-						} catch (InterruptedException ex) {
-							Logger.getLogger(MyGraphics.class.getName()).log(
-									Level.SEVERE, null, ex);
-						}
-					}
-				}
-			}
+			moveNextSubCell(startCell, endCell);
 			System.out.println("->Move from " + startCell.column + "x"
 					+ startCell.row + " to " + endCell.column + "x"
 					+ endCell.row);

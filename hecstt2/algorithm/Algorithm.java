@@ -242,7 +242,7 @@ public class Algorithm extends Thread {
                 }
             }
         }
-        
+
         if (!select.isEmpty()) {
             for (SubCell abc : select) {
                 if (checkDirection(abc, robotCell)) {
@@ -296,8 +296,69 @@ public class Algorithm extends Thread {
             }
         } while (tmp);
     }
-    
-    public boolean getStateBattery(){
+
+    public boolean getStateBattery() {
         return robot.numberstep >= robot.battery;
+    }
+
+    public void moveNextSubCell(SubCell current, SubCell nextcell) {
+        if (nextcell.column == current.column) {
+            if (nextcell.row > current.row) {
+                for (int j = robot.y; j <= nextcell.row * mapconfig.cell; j += 2) {
+                    checkObstacle(robot.x, j);
+                    try {
+                        robot.y = j;
+                        Thread.sleep(30);
+                        frame.repaint(robot.x, robot.y, mapconfig.cell,
+                                mapconfig.cell);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(MyGraphics.class.getName()).log(
+                                Level.SEVERE, null, ex);
+                    }
+                }
+            } else {
+                for (int j = robot.y; j >= nextcell.row * mapconfig.cell; j -= 2) {
+                    checkObstacle(robot.x, j);
+                    try {
+                        robot.y = j;
+                        Thread.sleep(30);
+                        frame.repaint(robot.x, robot.y, mapconfig.cell,
+                                mapconfig.cell);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(MyGraphics.class.getName()).log(
+                                Level.SEVERE, null, ex);
+                    }
+                }
+            }
+
+        } else {
+            if (nextcell.column > current.column) {
+                for (int i = robot.x; i <= nextcell.column * mapconfig.cell; i += 2) {
+                    checkObstacle(i, robot.y);
+                    try {
+                        robot.x = i;
+                        Thread.sleep(30);
+                        frame.repaint(robot.x, robot.y, mapconfig.cell,
+                                mapconfig.cell);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(MyGraphics.class.getName()).log(
+                                Level.SEVERE, null, ex);
+                    }
+                }
+            } else {
+                for (int i = robot.x; i >= nextcell.column * mapconfig.cell; i -= 2) {
+                    checkObstacle(i, robot.y);
+                    try {
+                        robot.x = i;
+                        Thread.sleep(30);
+                        frame.repaint(robot.x, robot.y, mapconfig.cell,
+                                mapconfig.cell);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(MyGraphics.class.getName()).log(
+                                Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
     }
 }
