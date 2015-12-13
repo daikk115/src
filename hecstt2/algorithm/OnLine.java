@@ -118,7 +118,6 @@ public class OnLine extends Algorithm {
 			if (endCell == null) {
 				break;
 			}
-			robot.listStep.add(endCell);
 			robot.numberstep++;
 			robot.battery--;
 			moveNextSubCell(startCell, endCell);

@@ -8,8 +8,7 @@ package hecstt2.algorithm;
 import hecstt2.gui.MyGraphics;
 import hecstt2.gui.SubCell;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
 
 /**
  *
@@ -47,7 +46,7 @@ public class OffLine extends Algorithm {
                 break;
             }
             if (!matrix[nextcell.column][nextcell.row].value) {
-
+                
             }
             moveNextSubCell(current, nextcell);
             current.column = nextcell.column;
