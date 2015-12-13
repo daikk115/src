@@ -9,6 +9,7 @@ package hecstt2.gui;
  *
  * @author daidv Hệ cơ sở tri thức - thầy Phạm Văn Hải
  */
+import hecstt2.algorithm.Algorithm;
 import hecstt2.algorithm.OffLine;
 import hecstt2.algorithm.OnLine;
 
@@ -36,15 +37,18 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -88,7 +92,9 @@ public class MyGraphics extends JFrame {
 
     private boolean keySTC = false;
     private boolean keyAddObstacle = false;
+
     private JButton obsBtn;
+    private JButton reduBtn;
 
     public MyGraphics() {
         setTitle("BÀI TOÁN TÌM ĐƯỜNG ĐI BAO PHỦ");
@@ -133,6 +139,51 @@ public class MyGraphics extends JFrame {
         });
         file.add(open);
         file.add(save);
+        
+        Menu somemap = new Menu("Maps");
+        MenuItem map1 = new MenuItem("map 1");
+        MenuItem map2 = new MenuItem("map 2");
+        map1.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (int i = 4; i < 11; i++) {
+                    matrix[i][0].value = false;
+                    matrix[i][1].value = false;
+                }
+                matrix[8][4].value = false;
+                matrix[9][4].value = false;
+                matrix[7][5].value = false;
+                matrix[8][5].value = false;
+                matrix[9][5].value = false;
+                matrix[10][5].value = false;
+                matrix[8][6].value = false;
+                matrix[9][6].value = false;
+                
+                for (int i = 0; i < 7; i++) {
+                    matrix[i][mapconfig.numberrows-1].value = false;
+                    matrix[i][mapconfig.numberrows-2].value = false;
+                }
+                
+                for (int i = 10; i < 15; i++) {
+                    matrix[i][mapconfig.numberrows-1].value = false;
+                    matrix[i][mapconfig.numberrows-2].value = false;
+                }
+                repaint();
+            }
+        });
+        
+        map2.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+            }
+        });
+        somemap.add(map1);
+        somemap.add(map2);
+        
+        menu.add(somemap);
         menu.add(file);
         setMenuBar(menu);
 
@@ -142,6 +193,7 @@ public class MyGraphics extends JFrame {
         // maps thành ma trận
         mapconfig.ConfigSize(screen.width - 300, screen.height);
         robot.listStep.add(new SubCell(robot.x / mapconfig.cell, robot.y / mapconfig.cell));
+
         // Khởi tạo image để gán cho giao diện bản đồ
         img = new BufferedImage(mapconfig.width + 1, mapconfig.height + 1,
                 BufferedImage.TYPE_INT_RGB);
@@ -238,6 +290,7 @@ public class MyGraphics extends JFrame {
         // /////////////////////////////////////
         JButton run = new JButton("OffLine");
         run.setBounds(20, 20, 120, 35);
+        run.setBackground(Color.getHSBColor(0.418f, 0.882f, 1f));
         run.addActionListener(new ActionListener() {
 
             @Override
@@ -252,9 +305,10 @@ public class MyGraphics extends JFrame {
             }
         });
 
-        JButton searchstc = new JButton("Set Battery");
-        searchstc.setBounds(160, 20, 120, 35);
-        searchstc.addActionListener(new ActionListener() {
+        JButton setBattery = new JButton("Set Battery");
+        setBattery.setBounds(20, 130, 120, 35);
+        setBattery.setBackground(Color.getHSBColor(0.424f, 0.611f, 0.706f));
+        setBattery.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -272,6 +326,7 @@ public class MyGraphics extends JFrame {
         // Online Algorithm
         JButton onlineBtn = new JButton("Online");
         onlineBtn.setBounds(20, 75, 120, 35);
+        onlineBtn.setBackground(Color.getHSBColor(0.424f, 0.611f, 0.706f));
         onlineBtn.addActionListener(new ActionListener() {
 
             @Override
@@ -284,6 +339,7 @@ public class MyGraphics extends JFrame {
 
         JButton stcBtn = new JButton("show STC");
         stcBtn.setBounds(160, 75, 120, 35);
+        stcBtn.setBackground(Color.getHSBColor(0.593f, 0.669f, 0.545f));
         stcBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -293,16 +349,34 @@ public class MyGraphics extends JFrame {
 
         obsBtn = new JButton("+ Obstacle");
         obsBtn.setBounds(160, 130, 120, 35);
+        obsBtn.setBackground(Color.getHSBColor(0.593f, 0.669f, 0.545f));
         obsBtn.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!keyAddObstacle){
+                if (!keyAddObstacle) {
                     keyAddObstacle = true;
                     obsBtn.setText("stop Add");
-                }else{
+                } else {
                     keyAddObstacle = false;
                     obsBtn.setText("+ Obstacle");
+                }
+            }
+        });
+
+        reduBtn = new JButton("DeepClean");
+        reduBtn.setBounds(160, 20, 120, 35);
+        reduBtn.setBackground(Color.getHSBColor(0.593f, 0.669f, 0.545f));
+        reduBtn.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!Algorithm.keyRedundancy) {
+                    Algorithm.keyRedundancy = true;
+                    reduBtn.setText("FastClean");
+                } else {
+                    Algorithm.keyRedundancy = false;
+                    reduBtn.setText("DeepClean");
                 }
             }
         });
@@ -315,6 +389,18 @@ public class MyGraphics extends JFrame {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 System.exit(0);
+            }
+        });
+
+        JButton reset = new JButton("RECREATE");
+        reset.setBounds(160, 145, 120, 35);
+        reset.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false); //you can't see me!
+                dispose(); //Destroy the JFrame object
+                MyGraphics tmp = new MyGraphics();
             }
         });
 
@@ -336,10 +422,11 @@ public class MyGraphics extends JFrame {
 //        middle_left.setBorder(BorderFactory.createLineBorder(Color.green, 2));
         middle_left.setLayout(null);
         middle_left.setBounds(0, 250, 300, 200);
-        middle_left.add(searchstc);
+        middle_left.add(setBattery);
         middle_left.add(onlineBtn);
         middle_left.add(stcBtn);
         middle_left.add(obsBtn);
+        middle_left.add(reduBtn);
         middle_left.add(run);
 
         JPanel bottom_left = new JPanel();
@@ -347,6 +434,7 @@ public class MyGraphics extends JFrame {
         bottom_left.setLayout(null);
         bottom_left.setBounds(0, 450, 300, 250);
         bottom_left.add(exit);
+        bottom_left.add(reset);
         bottom_left.add(text);
 
         left.add(top_left);
@@ -359,44 +447,49 @@ public class MyGraphics extends JFrame {
     }
 
     public void read() throws IOException {
-        int c = -1;
-        FileReader fr = null;
-        BufferedReader br = null;
-        chooser = fileChoose.showOpenDialog(null);
-        if (chooser == JFileChooser.APPROVE_OPTION) {
-            f = fileChoose.getSelectedFile();
-            try {
-                fr = new FileReader(f);
-                br = new BufferedReader(fr);
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(MyGraphics.class.getName()).log(Level.SEVERE,
-                        null, ex);
-            }
-        }
-        // while(true)
-
-        br.close();
-        fr.close();
+//        int c = -1;
+//        FileReader fr = null;
+//        chooser = fileChoose.showOpenDialog(null);
+//        if (chooser == JFileChooser.APPROVE_OPTION) {
+//            f = fileChoose.getSelectedFile();
+//            try {
+//                fr = new FileReader(f);
+//                if(fr == null){
+//                    return;
+//                }
+//                FileInputStream fin = new FileInputStream(f);
+//                ObjectInputStream ois = new ObjectInputStream(fin);
+//                this.matrix = (SubCell[][]) ois.readObject();
+//            } catch (FileNotFoundException ex) {
+//                Logger.getLogger(MyGraphics.class.getName()).log(Level.SEVERE,
+//                        null, ex);
+//            } catch (ClassNotFoundException ex) {
+//                Logger.getLogger(MyGraphics.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
+//        fr.close();
     }
 
     public void write() throws IOException {
-        FileWriter fw = null;
-        BufferedWriter bw = null;
-        chooser = fileChoose.showSaveDialog(null);
-        if (chooser == JFileChooser.APPROVE_OPTION) {
-            try {
-                f = fileChoose.getSelectedFile();
-                fw = new FileWriter(f);
-                bw = new BufferedWriter(fw);
-                // if(bw == null) return;
-                bw.close();
-                fw.close();
-            } catch (IOException ex) {
-                Logger.getLogger(MyGraphics.class.getName()).log(Level.SEVERE,
-                        null, ex);
-            }
-
-        }
+//        FileWriter fw = null;
+//        chooser = fileChoose.showSaveDialog(null);
+//        if (chooser == JFileChooser.APPROVE_OPTION) {
+//            try {
+//                f = fileChoose.getSelectedFile();
+//                fw = new FileWriter(f);
+//                if (fw == null) {
+//                    return;
+//                }
+//                FileOutputStream fout = new FileOutputStream(f);
+//                ObjectOutputStream oos = new ObjectOutputStream(fout);
+//                oos.writeObject(matrix);
+//                fw.close();
+//            } catch (IOException ex) {
+//                Logger.getLogger(MyGraphics.class.getName()).log(Level.SEVERE,
+//                        null, ex);
+//            }
+//
+//        }
     }
 
     /**
@@ -503,8 +596,8 @@ public class MyGraphics extends JFrame {
                     * mapconfig.cell);
         }
     }
-    
-    public void addObstacle(int x, int y){
+
+    public void addObstacle(int x, int y) {
         listObstacles.add(new MyObstacle(x, y, 10, this, listObstacles.size()));
     }
 }

@@ -28,6 +28,7 @@ public class Algorithm extends Thread {
     public JFrame frame;
     public ArrayList<Edge> listSTC;
     public ArrayList<MyObstacle> listObstacles;
+    public static boolean keyRedundancy = false;
 
     /**
      * truyền matrix để thuật toán hiểu bản đồ. truyền map để hàm vẽ có thể vẽ
@@ -261,13 +262,13 @@ public class Algorithm extends Thread {
             for (SubCell abc : select) {
                 if (checkDirection(abc, robotCell)) {
                     // uu tien cung canh
-                    robot.listStep.add(abc);
+//                    robot.listStep.add(abc);
                     return abc;
                 } else {
                     if ((abc.column / 2 == robotCell.column / 2)
                             && (abc.row / 2 == robotCell.row / 2)) {
                         // uu tien cung CELL
-                        robot.listStep.add(abc);
+//                        robot.listStep.add(abc);
                         return abc;
                     }
                 }
@@ -276,7 +277,7 @@ public class Algorithm extends Thread {
         if (select.isEmpty()) {
             return null;
         } else {
-            robot.listStep.add(select.get(0));
+//            robot.listStep.add(select.get(0));
             return select.get(0);
         }
     }
@@ -311,11 +312,12 @@ public class Algorithm extends Thread {
         } while (tmp);
     }
 
-    public boolean getStateBattery() {
+    public boolean isLowBattery() {
         return robot.numberstep >= robot.battery - 6;
     }
 
     public void moveNextSubCell(SubCell current, SubCell nextcell) {
+        robot.listStep.add(nextcell);
         if (nextcell.column == current.column) {
             if (nextcell.row > current.row) {
                 for (int j = robot.y; j <= nextcell.row * mapconfig.cell; j += 2) {
@@ -374,5 +376,78 @@ public class Algorithm extends Thread {
                 }
             }
         }
+    }
+
+    public void moveSubCellRedundancy(SubCell endCell) {
+        SubCell tmp;
+        tmp = checkRedundancy(endCell.column, endCell.row, 0);
+        if (tmp != null) {
+            moveNextSubCell(endCell, tmp);
+            moveNextSubCell(tmp, endCell);
+        }
+
+        tmp = checkRedundancy(endCell.column, endCell.row, 1);
+        if (tmp != null) {
+            moveNextSubCell(endCell, tmp);
+            moveNextSubCell(tmp, endCell);
+        }
+
+        tmp = checkRedundancy(endCell.column, endCell.row, 2);
+        if (tmp != null) {
+            moveNextSubCell(endCell, tmp);
+            moveNextSubCell(tmp, endCell);
+        }
+
+        tmp = checkRedundancy(endCell.column, endCell.row, 3);
+        if (tmp != null) {
+            moveNextSubCell(endCell, tmp);
+            moveNextSubCell(tmp, endCell);
+        }
+    }
+
+    public SubCell checkRedundancy(int column, int row, int i) {
+        switch (i) {
+            case 0: {
+                // trên
+                if (checkNotOver(column, row - 1)) {
+                    if (!matrix[column][row - 1].valuebigcell
+                            && matrix[column][row - 1].value) {
+                        return matrix[column][row - 1];
+                    }
+                }
+                break;
+            }
+            case 1: {
+                // phải
+                if (checkNotOver(column + 1, row)) {
+                    if (!matrix[column + 1][row].valuebigcell
+                            && matrix[column + 1][row].value) {
+                        return matrix[column + 1][row];
+                    }
+                }
+                break;
+            }
+            case 2: {
+                //dưới 
+                if (checkNotOver(column, row + 1)) {
+                    if (!matrix[column][row + 1].valuebigcell
+                            && matrix[column][row + 1].value) {
+                        return matrix[column][row + 1];
+                    }
+                }
+                break;
+            }
+            default: {
+                //trái
+                if (checkNotOver(column - 1, row)) {
+                    if (!matrix[column - 1][row].valuebigcell
+                            && matrix[column - 1][row].value) {
+                        return matrix[column - 1][row];
+                    }
+                }
+                break;
+            }
+        }
+        return null;
     }
 }

@@ -5,7 +5,6 @@ import hecstt2.gui.MyGraphics;
 import hecstt2.gui.SubCell;
 
 import java.util.ArrayList;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -21,8 +20,6 @@ public class OnLine extends Algorithm {
 
     @Override
     public void run() {
-        robot.listStep.add(new SubCell(robot.x / mapconfig.cell, robot.x
-                / mapconfig.cell));
         onlineSTC(null, new SubCell(1, 1));
     }
 
@@ -42,7 +39,7 @@ public class OnLine extends Algorithm {
                     || checkInSTC(neighbors.get(i))) {
                 continue;
             }
-            if (!getStateBattery()) {
+            if (!isLowBattery()) {
                 constructST(currentCell, neighbors.get(i));
                 System.out.println("Move foward " + i);
                 move(currentCell, neighbors.get(i));
@@ -130,6 +127,10 @@ public class OnLine extends Algorithm {
             robot.numberstep++;
             robot.battery--;
             moveNextSubCell(startCell, endCell);
+            if(keyRedundancy && !isLowBattery()){
+                moveSubCellRedundancy(endCell);
+            }
+            
             System.out.println("->Move from " + startCell.column + "x"
                     + startCell.row + " to " + endCell.column + "x"
                     + endCell.row);

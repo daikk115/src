@@ -355,7 +355,20 @@ public class MyObstacle extends Thread {
     public boolean checkNotOver(int x, int y) {
         int height = this.frame.mapconfig.height - this.frame.mapconfig.cell;
         int width = this.frame.mapconfig.width - this.frame.mapconfig.cell;
-        return (x >= 0 && y >= 0 && x < width && y < height);
+        if (x >= 0 && y >= 0 && x < width && y < height){
+            return checkBlocks(x, y);
+        }else{
+            return false;
+        }
     }
 
+    public boolean checkBlocks(int x, int y) {
+        int size = frame.mapconfig.cell;
+        int column = x / size;
+        int row = y / size;
+        return frame.matrix[column][row].value 
+                && frame.matrix[column+1][row].value 
+                && frame.matrix[column][row+1].value 
+                && frame.matrix[column+1][row+1].value;
+    }
 }

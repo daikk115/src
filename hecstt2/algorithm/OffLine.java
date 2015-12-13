@@ -8,8 +8,6 @@ package hecstt2.algorithm;
 import hecstt2.gui.MyGraphics;
 import hecstt2.gui.SubCell;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author daidv
@@ -49,6 +47,10 @@ public class OffLine extends Algorithm {
                 
             }
             moveNextSubCell(current, nextcell);
+            if(keyRedundancy && !isLowBattery()){
+                moveSubCellRedundancy(nextcell);
+            }
+            
             current.column = nextcell.column;
             current.row = nextcell.row;
         } while (!(start.column == current.column && start.row == current.row));
