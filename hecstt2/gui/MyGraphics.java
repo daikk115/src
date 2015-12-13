@@ -87,6 +87,8 @@ public class MyGraphics extends JFrame {
     private OnLine online;
 
     private boolean keySTC = false;
+    private boolean keyAddObstacle = false;
+    private JButton obsBtn;
 
     public MyGraphics() {
         setTitle("BÀI TOÁN TÌM ĐƯỜNG ĐI BAO PHỦ");
@@ -177,10 +179,10 @@ public class MyGraphics extends JFrame {
         }
 
         // add obstacles
-        listObstacles.add(new MyObstacle(0, 100, 10, this, 1));
-        listObstacles.add(new MyObstacle(0, 350, 10, this, 2));
-        listObstacles.add(new MyObstacle(350, 0, 10, this, 3));
-        listObstacles.add(new MyObstacle(250, 0, 10, this, 4));
+//        listObstacles.add(new MyObstacle(0, 100, 1, this, 1));
+//        listObstacles.add(new MyObstacle(0, 350, 2, this, 2));
+//        listObstacles.add(new MyObstacle(350, 0, 2, this, 3));
+//        listObstacles.add(new MyObstacle(250, 0, 2, this, 4));
 
         // map.setBorder(BorderFactory.createLineBorder(Color.green, 2, true));
         map.setPreferredSize(new Dimension(screen.width - 300, screen.height));
@@ -191,19 +193,25 @@ public class MyGraphics extends JFrame {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                int i = e.getX() / mapconfig.cell;
-                int j = e.getY() / mapconfig.cell;
-                if (i >= mapconfig.numbercolumns || j >= mapconfig.numberrows) {
-                    return;
-                }
-                if (matrix[i][j].value) {
-                    matrix[i][j].value = false;
-                    repaint(i * mapconfig.cell, j * mapconfig.cell,
-                            mapconfig.cell, mapconfig.cell);
+                if (keyAddObstacle) {
+                    // add Obstacle here
+                    addObstacle(e.getX(), e.getY());
+//                    keyAddObstacle = false;
                 } else {
-                    matrix[i][j].value = true;
-                    repaint(i * mapconfig.cell, j * mapconfig.cell,
-                            mapconfig.cell, mapconfig.cell);
+                    int i = e.getX() / mapconfig.cell;
+                    int j = e.getY() / mapconfig.cell;
+                    if (i >= mapconfig.numbercolumns || j >= mapconfig.numberrows) {
+                        return;
+                    }
+                    if (matrix[i][j].value) {
+                        matrix[i][j].value = false;
+                        repaint(i * mapconfig.cell, j * mapconfig.cell,
+                                mapconfig.cell, mapconfig.cell);
+                    } else {
+                        matrix[i][j].value = true;
+                        repaint(i * mapconfig.cell, j * mapconfig.cell,
+                                mapconfig.cell, mapconfig.cell);
+                    }
                 }
             }
 
@@ -256,14 +264,14 @@ public class MyGraphics extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                String input  = JOptionPane.showInputDialog("Input here");
+                String input = JOptionPane.showInputDialog("Input here");
                 try {
                     int ans = Integer.parseInt(input);
                     robot.battery = ans;
                 } catch (Exception error) {
                     JOptionPane.showMessageDialog(null, "You must input a interger number");
                 }
-                
+
             }
         });
 
@@ -280,12 +288,28 @@ public class MyGraphics extends JFrame {
             }
         });
 
-        JButton obsBtn = new JButton("show STC");
-        obsBtn.setBounds(160, 75, 120, 35);
-        obsBtn.addActionListener(new ActionListener() {
+        JButton stcBtn = new JButton("show STC");
+        stcBtn.setBounds(160, 75, 120, 35);
+        stcBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 keySTC = !keySTC;
+            }
+        });
+
+        obsBtn = new JButton("+ Obstacle");
+        obsBtn.setBounds(160, 130, 120, 35);
+        obsBtn.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(!keyAddObstacle){
+                    keyAddObstacle = true;
+                    obsBtn.setText("stop Add");
+                }else{
+                    keyAddObstacle = false;
+                    obsBtn.setText("+ Obstacle");
+                }
             }
         });
 
@@ -320,6 +344,7 @@ public class MyGraphics extends JFrame {
         middle_left.setBounds(0, 250, 300, 200);
         middle_left.add(searchstc);
         middle_left.add(onlineBtn);
+        middle_left.add(stcBtn);
         middle_left.add(obsBtn);
         middle_left.add(run);
 
@@ -483,5 +508,9 @@ public class MyGraphics extends JFrame {
                     * mapconfig.cell, e.end.column * mapconfig.cell, e.end.row
                     * mapconfig.cell);
         }
+    }
+    
+    public void addObstacle(int x, int y){
+        listObstacles.add(new MyObstacle(x, y, 10, this, listObstacles.size()));
     }
 }

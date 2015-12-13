@@ -242,7 +242,7 @@ public class Algorithm extends Thread {
                 }
             }
         }
-
+        
         if (!select.isEmpty()) {
             for (SubCell abc : select) {
                 if (checkDirection(abc, robotCell)) {
