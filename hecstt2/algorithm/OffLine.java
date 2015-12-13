@@ -6,11 +6,7 @@
 package hecstt2.algorithm;
 
 import hecstt2.gui.MyGraphics;
-import hecstt2.gui.MyObstacle;
 import hecstt2.gui.SubCell;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -47,85 +43,16 @@ public class OffLine extends Algorithm {
             if (nextcell == null) {
                 break;
             }
-            if (nextcell.column == current.column) {
-                if (nextcell.row > current.row) {
-                    for (int i = robot.y; i <= nextcell.row * mapconfig.cell; i += 2) {
-                        checkObstacle();
-                        try {
-                            robot.y = i;
-                            Thread.sleep(20);
-                            frame.repaint(robot.x, robot.y, mapconfig.cell,
-                                    mapconfig.cell);
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(MyGraphics.class.getName()).log(
-                                    Level.SEVERE, null, ex);
-                        }
-                    }
-                } else {
-                    for (int i = robot.y; i >= nextcell.row * mapconfig.cell; i -= 2) {
-                        checkObstacle();
-                        try {
-                            robot.y = i;
-                            Thread.sleep(20);
-                            frame.repaint(robot.x, robot.y, mapconfig.cell,
-                                    mapconfig.cell);
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(MyGraphics.class.getName()).log(
-                                    Level.SEVERE, null, ex);
-                        }
-                    }
-                }
-
-            } else {
-                if (nextcell.column > current.column) {
-                    for (int i = robot.x; i <= nextcell.column * mapconfig.cell; i += 2) {
-                        checkObstacle();
-                        try {
-                            robot.x = i;
-                            Thread.sleep(20);
-                            frame.repaint(robot.x, robot.y, mapconfig.cell,
-                                    mapconfig.cell);
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(MyGraphics.class.getName()).log(
-                                    Level.SEVERE, null, ex);
-                        }
-                    }
-                } else {
-                    for (int i = robot.x; i >= nextcell.column * mapconfig.cell; i -= 2) {
-                        checkObstacle();
-                        try {
-                            robot.x = i;
-                            Thread.sleep(20);
-                            frame.repaint(robot.x, robot.y, mapconfig.cell,
-                                    mapconfig.cell);
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(MyGraphics.class.getName()).log(
-                                    Level.SEVERE, null, ex);
-                        }
-                    }
-                }
+            if (!matrix[nextcell.column][nextcell.row].value) {
+                
             }
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(OffLine.class.getName()).log(Level.SEVERE,
-                        null, ex);
+            moveNextSubCell(current, nextcell);
+            if(keyRedundancy && !isLowBattery()){
+                moveSubCellRedundancy(nextcell);
             }
-            frame.repaint(robot.x, robot.y, mapconfig.cell, mapconfig.cell);
+            
             current.column = nextcell.column;
             current.row = nextcell.row;
         } while (!(start.column == current.column && start.row == current.row));
-    }
-
-    public void checkObstacle() {
-        for (MyObstacle obstacle : this.listObstacles) {
-            boolean tmp = obstacle.getFlag();
-            System.out.println(tmp);
-            while (tmp) {
-                tmp = obstacle.getFlag();
-                System.out.println(robot.x+" "+robot.y);
-                System.out.println(obstacle.x+" "+obstacle.y);
-            }
-        }
     }
 }

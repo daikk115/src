@@ -29,6 +29,7 @@ public class MapConfig{
         this.width = width;
         this.height = height;
         
+        // 10 | 20 | 30
         this.numbercolumns = 20; // cấu hình kích thước ở đây, phải à số chẵn vì số subcell phải chẵn
         this.cell = this.width / numbercolumns ;
         this.numberrows = this.height / this.cell;
