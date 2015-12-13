@@ -22,7 +22,8 @@ public class MyRobot {
         this.x = 0;
         this.y = 0;
         this.speed = 100;
-        this.fileImage = "src/hecstt2/image/robot.png";
+        this.fileImage = "src/hecstt2/image/robot.png"; //getClass().getResource("../images/robot.png");
+        
     }
     
     public MyRobot(int x, int y){

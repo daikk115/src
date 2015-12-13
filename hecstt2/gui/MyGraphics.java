@@ -178,12 +178,6 @@ public class MyGraphics extends JFrame {
             }
         }
 
-        // add obstacles
-//        listObstacles.add(new MyObstacle(0, 100, 1, this, 1));
-//        listObstacles.add(new MyObstacle(0, 350, 2, this, 2));
-//        listObstacles.add(new MyObstacle(350, 0, 2, this, 3));
-//        listObstacles.add(new MyObstacle(250, 0, 2, this, 4));
-
         // map.setBorder(BorderFactory.createLineBorder(Color.green, 2, true));
         map.setPreferredSize(new Dimension(screen.width - 300, screen.height));
         add(map, BorderLayout.EAST);
@@ -239,7 +233,7 @@ public class MyGraphics extends JFrame {
         JPanel left = new JPanel();
         left.setLayout(null);
         left.setPreferredSize(new Dimension(300, screen.height));
-        left.setBorder(BorderFactory.createLineBorder(Color.green, 2, true));
+//        left.setBorder(BorderFactory.createLineBorder(Color.green, 2, true));
 
         // /////////////////////////////////////
         JButton run = new JButton("OffLine");
@@ -330,7 +324,7 @@ public class MyGraphics extends JFrame {
         text.setBounds(20, 20, 250, 100);
 
         JPanel top_left = new JPanel();
-        top_left.setBorder(BorderFactory.createLineBorder(Color.green, 2, true));
+//        top_left.setBorder(BorderFactory.createLineBorder(Color.green, 2, true));
         top_left.setLayout(null);
 
         JLabel top_left_JLabel = new JLabel(new ImageIcon("src/hecstt2/image/panel.jpg"));
@@ -339,7 +333,7 @@ public class MyGraphics extends JFrame {
         top_left.setBounds(0, 0, 300, 250);
 
         JPanel middle_left = new JPanel();
-        middle_left.setBorder(BorderFactory.createLineBorder(Color.green, 2));
+//        middle_left.setBorder(BorderFactory.createLineBorder(Color.green, 2));
         middle_left.setLayout(null);
         middle_left.setBounds(0, 250, 300, 200);
         middle_left.add(searchstc);
@@ -349,7 +343,7 @@ public class MyGraphics extends JFrame {
         middle_left.add(run);
 
         JPanel bottom_left = new JPanel();
-        bottom_left.setBorder(BorderFactory.createLineBorder(Color.green, 2));
+//        bottom_left.setBorder(BorderFactory.createLineBorder(Color.green, 2));
         bottom_left.setLayout(null);
         bottom_left.setBounds(0, 450, 300, 250);
         bottom_left.add(exit);

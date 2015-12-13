@@ -64,6 +64,20 @@ public class Algorithm extends Thread {
         }
     }
 
+    public void resetAllBlock() {
+        for (int i = 0; i < mapconfig.numbercolumns; i++) {
+            for (int j = 0; j < mapconfig.numberrows; j++) {
+                matrix[i][j].top = true;
+                matrix[i][j].down = true;
+                matrix[i][j].left = true;
+                matrix[i][j].right = true;
+                matrix[i][j].valuebigcell = true;
+                matrix[i][j].added = false;
+                matrix[i][j].addedRNS = false;
+            }
+        }
+    }
+
     /**
      * * Thuật toán STC sử dụng BFS để tìm kiếm cây khung.
      */
@@ -298,7 +312,7 @@ public class Algorithm extends Thread {
     }
 
     public boolean getStateBattery() {
-        return robot.numberstep >= robot.battery;
+        return robot.numberstep >= robot.battery - 6;
     }
 
     public void moveNextSubCell(SubCell current, SubCell nextcell) {
@@ -308,7 +322,7 @@ public class Algorithm extends Thread {
                     checkObstacle(robot.x, j);
                     try {
                         robot.y = j;
-                        Thread.sleep(30);
+                        Thread.sleep(18);
                         frame.repaint(robot.x, robot.y, mapconfig.cell,
                                 mapconfig.cell);
                     } catch (InterruptedException ex) {
@@ -321,7 +335,7 @@ public class Algorithm extends Thread {
                     checkObstacle(robot.x, j);
                     try {
                         robot.y = j;
-                        Thread.sleep(30);
+                        Thread.sleep(18);
                         frame.repaint(robot.x, robot.y, mapconfig.cell,
                                 mapconfig.cell);
                     } catch (InterruptedException ex) {
@@ -337,7 +351,7 @@ public class Algorithm extends Thread {
                     checkObstacle(i, robot.y);
                     try {
                         robot.x = i;
-                        Thread.sleep(30);
+                        Thread.sleep(18);
                         frame.repaint(robot.x, robot.y, mapconfig.cell,
                                 mapconfig.cell);
                     } catch (InterruptedException ex) {
@@ -350,7 +364,7 @@ public class Algorithm extends Thread {
                     checkObstacle(i, robot.y);
                     try {
                         robot.x = i;
-                        Thread.sleep(30);
+                        Thread.sleep(18);
                         frame.repaint(robot.x, robot.y, mapconfig.cell,
                                 mapconfig.cell);
                     } catch (InterruptedException ex) {
