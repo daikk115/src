@@ -247,11 +247,13 @@ public class Algorithm extends Thread {
             for (SubCell abc : select) {
                 if (checkDirection(abc, robotCell)) {
                     // uu tien cung canh
+                    robot.listStep.add(abc);
                     return abc;
                 } else {
                     if ((abc.column / 2 == robotCell.column / 2)
                             && (abc.row / 2 == robotCell.row / 2)) {
                         // uu tien cung CELL
+                        robot.listStep.add(abc);
                         return abc;
                     }
                 }
@@ -260,6 +262,7 @@ public class Algorithm extends Thread {
         if (select.isEmpty()) {
             return null;
         } else {
+            robot.listStep.add(select.get(0));
             return select.get(0);
         }
     }
