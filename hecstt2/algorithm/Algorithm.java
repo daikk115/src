@@ -12,6 +12,8 @@ import hecstt2.gui.MyObstacle;
 import hecstt2.gui.MyRobot;
 import hecstt2.gui.SubCell;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 /**
@@ -26,6 +28,7 @@ public class Algorithm extends Thread {
     public JFrame frame;
     public ArrayList<Edge> listSTC;
     public ArrayList<MyObstacle> listObstacles;
+    public static boolean keyRedundancy = false;
 
     /**
      * truyền matrix để thuật toán hiểu bản đồ. truyền map để hàm vẽ có thể vẽ
@@ -58,6 +61,20 @@ public class Algorithm extends Thread {
                     matrix[i + 1][j].valuebigcell = false;
                     matrix[i + 1][j + 1].valuebigcell = false;
                 }
+            }
+        }
+    }
+
+    public void resetAllBlock() {
+        for (int i = 0; i < mapconfig.numbercolumns; i++) {
+            for (int j = 0; j < mapconfig.numberrows; j++) {
+                matrix[i][j].top = true;
+                matrix[i][j].down = true;
+                matrix[i][j].left = true;
+                matrix[i][j].right = true;
+                matrix[i][j].valuebigcell = true;
+                matrix[i][j].added = false;
+                matrix[i][j].addedRNS = false;
             }
         }
     }
@@ -245,11 +262,13 @@ public class Algorithm extends Thread {
             for (SubCell abc : select) {
                 if (checkDirection(abc, robotCell)) {
                     // uu tien cung canh
+//                    robot.listStep.add(abc);
                     return abc;
                 } else {
                     if ((abc.column / 2 == robotCell.column / 2)
                             && (abc.row / 2 == robotCell.row / 2)) {
                         // uu tien cung CELL
+//                        robot.listStep.add(abc);
                         return abc;
                     }
                 }
@@ -258,6 +277,7 @@ public class Algorithm extends Thread {
         if (select.isEmpty()) {
             return null;
         } else {
+//            robot.listStep.add(select.get(0));
             return select.get(0);
         }
     }
@@ -267,5 +287,171 @@ public class Algorithm extends Thread {
         b = matrix[b.column][b.row];
         return (!a.top && !b.top) || (!a.down && !b.down)
                 || (!a.left && !b.left) || (!a.right && !b.right);
+    }
+
+    public void checkObstacle(int xRobot, int yRobot) {
+
+        boolean tmp;
+        do {
+            tmp = false;
+            synchronized (this.listObstacles) {
+                for (MyObstacle obstacle : this.listObstacles) {
+                    tmp = obstacle.getFlag(xRobot, yRobot, obstacle.x, obstacle.y);
+                    if (tmp) {
+                        break;
+                    }
+                }
+            }
+            if (tmp) {
+                try {
+                    OffLine.sleep(30);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(OffLine.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } while (tmp);
+    }
+
+    public boolean isLowBattery() {
+        return robot.numberstep >= robot.battery - 6;
+    }
+
+    public void moveNextSubCell(SubCell current, SubCell nextcell) {
+        robot.listStep.add(nextcell);
+        if (nextcell.column == current.column) {
+            if (nextcell.row > current.row) {
+                for (int j = robot.y; j <= nextcell.row * mapconfig.cell; j += 2) {
+                    checkObstacle(robot.x, j);
+                    try {
+                        robot.y = j;
+                        Thread.sleep(18);
+                        frame.repaint(robot.x, robot.y, mapconfig.cell,
+                                mapconfig.cell);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(MyGraphics.class.getName()).log(
+                                Level.SEVERE, null, ex);
+                    }
+                }
+            } else {
+                for (int j = robot.y; j >= nextcell.row * mapconfig.cell; j -= 2) {
+                    checkObstacle(robot.x, j);
+                    try {
+                        robot.y = j;
+                        Thread.sleep(18);
+                        frame.repaint(robot.x, robot.y, mapconfig.cell,
+                                mapconfig.cell);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(MyGraphics.class.getName()).log(
+                                Level.SEVERE, null, ex);
+                    }
+                }
+            }
+
+        } else {
+            if (nextcell.column > current.column) {
+                for (int i = robot.x; i <= nextcell.column * mapconfig.cell; i += 2) {
+                    checkObstacle(i, robot.y);
+                    try {
+                        robot.x = i;
+                        Thread.sleep(18);
+                        frame.repaint(robot.x, robot.y, mapconfig.cell,
+                                mapconfig.cell);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(MyGraphics.class.getName()).log(
+                                Level.SEVERE, null, ex);
+                    }
+                }
+            } else {
+                for (int i = robot.x; i >= nextcell.column * mapconfig.cell; i -= 2) {
+                    checkObstacle(i, robot.y);
+                    try {
+                        robot.x = i;
+                        Thread.sleep(18);
+                        frame.repaint(robot.x, robot.y, mapconfig.cell,
+                                mapconfig.cell);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(MyGraphics.class.getName()).log(
+                                Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
+    }
+
+    public void moveSubCellRedundancy(SubCell endCell) {
+        SubCell tmp;
+        tmp = checkRedundancy(endCell.column, endCell.row, 0);
+        if (tmp != null) {
+            moveNextSubCell(endCell, tmp);
+            moveNextSubCell(tmp, endCell);
+        }
+
+        tmp = checkRedundancy(endCell.column, endCell.row, 1);
+        if (tmp != null) {
+            moveNextSubCell(endCell, tmp);
+            moveNextSubCell(tmp, endCell);
+        }
+
+        tmp = checkRedundancy(endCell.column, endCell.row, 2);
+        if (tmp != null) {
+            moveNextSubCell(endCell, tmp);
+            moveNextSubCell(tmp, endCell);
+        }
+
+        tmp = checkRedundancy(endCell.column, endCell.row, 3);
+        if (tmp != null) {
+            moveNextSubCell(endCell, tmp);
+            moveNextSubCell(tmp, endCell);
+        }
+    }
+
+    public SubCell checkRedundancy(int column, int row, int i) {
+        switch (i) {
+            case 0: {
+                // trên
+                if (checkNotOver(column, row - 1)) {
+                    if (!matrix[column][row - 1].valuebigcell
+                            && matrix[column][row - 1].value
+                            && !robot.checkInListStep(column, row - 1)) {
+                        return matrix[column][row - 1];
+                    }
+                }
+                break;
+            }
+            case 1: {
+                // phải
+                if (checkNotOver(column + 1, row)) {
+                    if (!matrix[column + 1][row].valuebigcell
+                            && matrix[column + 1][row].value
+                            && !robot.checkInListStep(column + 1, row)) {
+                        return matrix[column + 1][row];
+                    }
+                }
+                break;
+            }
+            case 2: {
+                //dưới 
+                if (checkNotOver(column, row + 1)) {
+                    if (!matrix[column][row + 1].valuebigcell
+                            && matrix[column][row + 1].value
+                            && !robot.checkInListStep(column, row + 1)) {
+                        return matrix[column][row + 1];
+                    }
+                }
+                break;
+            }
+            default: {
+                //trái
+                if (checkNotOver(column - 1, row)) {
+                    if (!matrix[column - 1][row].valuebigcell
+                            && matrix[column - 1][row].value
+                            && !robot.checkInListStep(column - 1, row)) {
+                        return matrix[column - 1][row];
+                    }
+                }
+                break;
+            }
+        }
+        return null;
     }
 }
